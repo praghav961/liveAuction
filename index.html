@@ -904,7 +904,10 @@ const firebaseConfig = {
       const s = state.settings || {};
       const bought = state.players.filter(p => p.status === "Sold" && p.soldToTeamId === team.id);
       const spent = bought.reduce((sum, p) => sum + Number(p.soldPrice || 0), 0);
-      const purse = Number(s.teamPurse || team.purse || 0);
+      
+      const topUpAmount = Number(team.topUp || 0);
+      const purse = Number(s.teamPurse || team.purse || 0) + topUpAmount;
+      
       const perTeam = Number(s.playersPerTeam || 0);
       const base = Number(s.basePrice || 0);
 
@@ -916,7 +919,7 @@ const firebaseConfig = {
       const reserve = (slotsLeft - 1) * base; 
       const maxBid = slotsLeft > 0 ? Math.max(0, purseLeft - reserve) : 0;
 
-      return { bought, spent, purseLeft, slotsFilled, slotsLeft, maxBid };
+      return { bought, spent, purseLeft, slotsFilled, slotsLeft, maxBid, topUpAmount };
     }
 
     // Real-time Logger System
