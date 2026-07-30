@@ -682,9 +682,25 @@
       border: 1px solid rgba(248,113,113,0.3);
     }
     .overlay-divider-unsold { background: var(--accent-red); }
+
+    /* ============ Toast Notification ============ */
+    .toast-msg {
+      background: var(--surface); border: 1px solid var(--accent-gold);
+      color: var(--text-main); padding: 12px 16px; border-radius: 12px;
+      font-size: 13px; text-align: center; font-weight: 700;
+      box-shadow: 0 8px 24px rgba(251,191,36,0.25);
+      animation: slideDownFade 0.3s ease-out, fadeOutUp 0.3s ease-in 3.7s forwards;
+      pointer-events: auto;
+    }
+    @keyframes slideDownFade { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes fadeOutUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+
   </style>
 </head>
 <body>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; width: 90%; max-width: 400px;"></div>
 
   <div id="app" class="app-shell">
 
@@ -883,6 +899,7 @@ const firebaseConfig = {
       feed: [],
       prevLiveId: "",
       prevStatusMap: new Map(),
+      prevTeamTopUpMap: new Map(),
       activeFilter: "All",
       searchQuery: ""
     };
@@ -897,6 +914,20 @@ const firebaseConfig = {
     // High performance placeholder image generator
     function placeholder(text = "?") {
       return `https://placehold.co/150x150/18181b/a1a1aa?text=${encodeURIComponent(text || "?")}`;
+    }
+
+    // Show Toast Notification
+    function showToast(message) {
+      const container = $("toastContainer");
+      if (!container) return;
+      
+      const toast = document.createElement("div");
+      toast.className = "toast-msg";
+      toast.innerHTML = message;
+      container.appendChild(toast);
+      
+      // Auto dismiss after animation
+      setTimeout(() => toast.remove(), 4000);
     }
 
     // Dynamic state computation for team card analytics
@@ -1371,8 +1402,27 @@ const firebaseConfig = {
       renderAll();
     });
 
+    let isFirstTeamsLoad = true;
     onSnapshot(teamsCol, snap => {
-      state.teams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const newTeams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if (!isFirstTeamsLoad) {
+        newTeams.forEach(team => {
+          const oldTopUp = state.prevTeamTopUpMap.get(team.id) || 0;
+          const newTopUp = Number(team.topUp) || 0;
+          
+          if (newTopUp > oldTopUp) {
+            const diff = newTopUp - oldTopUp;
+            showToast(`💰 <b>${team.name}</b> received a top-up of <span style="color:var(--accent-gold)">${money(diff)}</span>!`);
+            pushFeed(`💰 ${team.name} purse topped up by ${money(diff)}`);
+          }
+        });
+      }
+
+      state.prevTeamTopUpMap = new Map(newTeams.map(t => [t.id, Number(t.topUp) || 0]));
+      isFirstTeamsLoad = false;
+      
+      state.teams = newTeams;
       renderAll();
     });
 
