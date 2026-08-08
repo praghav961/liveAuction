@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Tournament - Live Auction</title>
+  <title>Auctify - Live Viewer</title>
   <meta name="theme-color" content="#09090b" />
 
   <script>
@@ -31,24 +31,12 @@
 
   <style>
     /* ============ Reset ============ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    button, input {
-      font: inherit;
-      color: inherit;
-      outline: none;
-      border: none;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    button, input { font: inherit; color: inherit; outline: none; border: none; }
     img { display: block; max-width: 100%; }
 
     /* ============ Design tokens ============ */
     :root {
-      /* Modern Dark Palette */
       --bg: #09090b; 
       --surface: #18181b; 
       --surface-hover: #27272a;
@@ -59,7 +47,6 @@
       --text-muted: #a1a1aa;
       --text-faint: #71717a;
 
-      /* Accents */
       --accent-gold: #fbbf24;
       --accent-gold-glow: rgba(251, 191, 36, 0.2);
       --accent-green: #34d399;
@@ -67,20 +54,14 @@
       --accent-red: #f87171;
       --accent-blue: #60a5fa;
 
-      --vh: 1vh; /* corrected by JS above for Android */
+      --vh: 1vh;
     }
 
     /* ============ Mobile viewport / Shell Locking ============ */
     html, body {
-      /* Lock the viewport entirely to prevent double-scrolling */
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      overflow: hidden;
-      touch-action: none; /* Prevents native pull-to-refresh and body scroll */
-      
-      height: 100vh;
-      height: 100dvh;
-      height: calc(var(--vh, 1vh) * 100);
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      overflow: hidden; touch-action: none; 
+      height: 100vh; height: 100dvh; height: calc(var(--vh, 1vh) * 100);
       margin: 0;
     }
 
@@ -88,11 +69,8 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       color: var(--text-main);
       background-color: var(--bg);
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-      overscroll-behavior: none;
+      width: 100%; display: flex; justify-content: center;
+      -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
     }
 
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -100,27 +78,25 @@
 
     .pb-safe { padding-bottom: env(safe-area-inset-bottom, 8px); }
 
-    /* ============ Premium Cinematic Entrance ============ */
+    /* ============ Animations ============ */
     @keyframes splashElegantIn {
       0% { opacity: 0; transform: translateY(30px); filter: blur(15px); }
       100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes pulseSoft { 
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.4); } 
+      50% { opacity: 0.7; box-shadow: 0 0 10px 0 rgba(52,211,153,0); } 
+    }
 
     /* ============ App shell ============ */
     .app-shell {
-      width: 100%;
-      max-width: 520px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background-color: var(--bg);
-      position: relative;
+      width: 100%; max-width: 520px; height: 100%;
+      flex-direction: column; overflow: hidden;
+      background-color: var(--bg); position: relative;
       border-left: 1px solid var(--border-light);
       border-right: 1px solid var(--border-light);
       box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
@@ -128,137 +104,43 @@
 
     /* ============ Header ============ */
     .app-header {
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 16px;
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border-light);
-      position: relative;
-      z-index: 10;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 12px 16px; background-color: var(--surface);
+      border-bottom: 1px solid var(--border-light); position: relative; z-index: 10;
     }
 
     .header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
     .icon-badge {
-      width: 40px; height: 40px;
+      width: 40px; height: 40px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent-gold-glow), transparent);
-      border: 1px solid var(--accent-gold-glow);
-      font-size: 22px;
-      flex-shrink: 0;
+      background: var(--surface-hover); border: 1px solid var(--border);
+      font-size: 18px; flex-shrink: 0; cursor: pointer; color: var(--text-muted);
+      transition: 0.2s;
     }
+    .icon-badge:active { transform: scale(0.9); }
 
     .header-text { min-width: 0; }
-
-    .header-title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .live-tag {
-      color: var(--bg);
-      font-weight: 700;
-      font-size: 10px;
-      background-color: var(--accent-gold);
-      padding: 2px 6px;
-      border-radius: 4px;
-      letter-spacing: 0.5px;
-    }
-
-    .header-tournament {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 700;
-      margin-top: 4px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .header-title { font-size: 16px; font-weight: 800; letter-spacing: -0.5px; line-height: 1; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+    .header-tournament { font-size: 11px; color: var(--text-muted); font-weight: 700; margin-top: 4px; letter-spacing: 0.5px; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .live-badge {
-      padding: 6px 12px;
-      border-radius: 9999px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--accent-green);
-      background-color: var(--accent-green-glow);
-      border: 1px solid rgba(52,211,153,0.3);
-      transition: all 0.2s ease;
-      animation: pulseSoft 2.5s infinite;
+      padding: 6px 10px; border-radius: 9999px; font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      color: var(--accent-green); background-color: var(--accent-green-glow); border: 1px solid rgba(52,211,153,0.3);
+      transition: all 0.2s ease; animation: pulseSoft 2.5s infinite;
     }
+    .live-badge.is-upcoming { color: var(--accent-blue); background-color: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.3); animation: none; }
+    .live-badge.is-complete { color: var(--accent-red); background-color: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.3); animation: none; }
 
-    .live-badge.is-complete {
-      color: var(--text-faint);
-      background-color: var(--surface);
-      border-color: var(--border);
-      animation: none;
-    }
-
-    .info-btn {
-      width: 32px; height: 32px;
-      border-radius: 9999px;
-      background-color: var(--surface-hover);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s ease;
-    }
+    .info-btn { width: 32px; height: 32px; border-radius: 9999px; background-color: var(--surface-hover); border: 1px solid var(--border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: all 0.2s ease; }
     .info-btn:active { transform: scale(0.9); color: var(--text-main); }
 
-    @keyframes pulseSoft { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.4); } 50% { opacity: 0.7; box-shadow: 0 0 10px 0 rgba(52,211,153,0); } }
-
     /* ============ Stats bar ============ */
-    .stats-bar {
-      flex-shrink: 0;
-      width: 100%;
-      overflow-x: auto;
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--border-light);
-      padding: 8px 12px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .stat-card {
-      min-width: 70px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
-      border-radius: 12px;
-      background-color: var(--bg);
-      border: 1px solid var(--border-light);
-    }
-
+    .stats-bar { flex-shrink: 0; width: 100%; overflow-x: auto; background-color: var(--surface); border-bottom: 1px solid var(--border-light); padding: 8px 12px; display: flex; gap: 8px; }
+    .stat-card { min-width: 70px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; border-radius: 12px; background-color: var(--bg); border: 1px solid var(--border-light); }
     .stat-card.stat-narrow { min-width: 60px; }
-
-    .stat-label {
-      font-size: 9px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
-      font-weight: 700;
-    }
-
+    .stat-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; font-weight: 700; }
     .stat-value { font-size: 14px; font-weight: 800; color: var(--text-main); }
     .stat-value.stat-purse { font-size: 12px; color: var(--accent-gold); }
     .stat-value.stat-round { color: var(--accent-blue); }
@@ -268,437 +150,149 @@
 
     /* ============ Screens / swiper ============ */
     #screenWrap { flex: 1; min-height: 0; position: relative; background-color: var(--bg); }
-
     .screen {
-      position: absolute;
-      inset: 0;
-      padding: 12px;
-      
-      /* Re-enable scrolling specifically for screens */
-      overflow-y: auto;
-      overflow-x: hidden;
-      touch-action: pan-y;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
-      
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateX(100%);
+      position: absolute; inset: 0; padding: 12px;
+      overflow-y: auto; overflow-x: hidden; touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+      opacity: 0; visibility: hidden; pointer-events: none; transform: translateX(100%);
       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0.25s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      display: flex; flex-direction: column; gap: 16px;
     }
-
     .screen.screen--tight { gap: 12px; }
-
-    .screen.active {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateX(0);
-    }
-
+    .screen.active { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(0); }
     .screen.left { transform: translateX(-100%); }
     .screen.right { transform: translateX(100%); }
-
     .screen::-webkit-scrollbar { width: 4px; }
     .screen::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
-    /* ============ Cards (shared) ============ */
-    .card {
-      border-radius: 16px;
-      background-color: var(--surface);
-      border: 1px solid var(--border-light);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
+    /* ============ Cards ============ */
+    .card { border-radius: 16px; background-color: var(--surface); border: 1px solid var(--border-light); padding: 16px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .card.card-grow { flex: 1; min-height: 180px; overflow: hidden; }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .card-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .pulse-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background-color: var(--accent-gold);
-      animation: ping 2s cubic-bezier(0,0,0.2,1) infinite;
-      box-shadow: 0 0 10px var(--accent-gold);
-    }
+    .card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); }
+    .card-title { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background-color: var(--accent-gold); animation: ping 2s cubic-bezier(0,0,0.2,1) infinite; box-shadow: 0 0 10px var(--accent-gold); }
     @keyframes ping { 75%, 100% { transform: scale(2.5); opacity: 0; } }
 
-    .count-badge {
-      padding: 2px 8px;
-      font-size: 10px;
-      font-weight: 800;
-      border-radius: 6px;
-      background-color: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-    }
-
-    .status-pill {
-      padding: 2px 10px;
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      border-radius: 4px;
-      background-color: var(--accent-gold-glow);
-      border: 1px solid rgba(251, 191, 36, 0.3);
-      color: var(--accent-gold);
-    }
+    .count-badge { padding: 2px 8px; font-size: 10px; font-weight: 800; border-radius: 6px; background-color: var(--bg); border: 1px solid var(--border); color: var(--text-muted); }
+    .status-pill { padding: 2px 10px; font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; border-radius: 4px; background-color: var(--accent-gold-glow); border: 1px solid rgba(251, 191, 36, 0.3); color: var(--accent-gold); }
     .status-pill.is-awaiting { background-color: var(--bg); border-color: var(--border); color: var(--text-muted); }
     .status-pill.is-reauction { background-color: rgba(248,113,113,0.15); border-color: rgba(248,113,113,0.3); color: var(--accent-red); }
 
-    /* ============ Live block / current player ============ */
-    .current-player-area {
-      min-height: 220px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8px 0;
-      border-radius: 12px;
-    }
-
-    .player-placeholder-avatar {
-      width: 96px; height: 96px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      background-color: var(--bg);
-      border: 1px dashed var(--border);
-      font-size: 36px;
-      color: var(--text-faint);
-      margin-bottom: 12px;
-    }
-
+    /* ============ Live block ============ */
+    .current-player-area { min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8px 0; border-radius: 12px; }
+    .player-placeholder-avatar { width: 96px; height: 96px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--bg); border: 1px dashed var(--border); font-size: 36px; color: var(--text-faint); margin-bottom: 12px; }
     .player-placeholder-title { font-size: 18px; font-weight: 800; color: var(--text-muted); }
-    .player-placeholder-text {
-      font-size: 12px; color: var(--text-faint); margin-top: 4px;
-      max-width: 220px; margin-left: auto; margin-right: auto;
-    }
-
+    .player-placeholder-text { font-size: 12px; color: var(--text-faint); margin-top: 4px; max-width: 220px; margin-left: auto; margin-right: auto; }
     .player-photo-wrap { position: relative; margin-bottom: 16px; }
-    .player-photo-glow {
-      position: absolute; inset: -10px;
-      background-color: var(--accent-gold);
-      border-radius: 50%;
-      filter: blur(15px);
-      opacity: 0.15;
-    }
-    .player-photo {
-      width: 112px; height: 112px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid var(--surface);
-      background-color: var(--surface);
-      position: relative; z-index: 10;
-      box-shadow: 0 0 0 2px var(--accent-gold-glow);
-    }
-
-    .player-base-price {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 14px; border-radius: 100px;
-      font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
-      background-color: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--accent-gold);
-      margin-bottom: 12px;
-    }
-
-    .player-name-title {
-      font-size: 22px; font-weight: 800; color: var(--text-main);
-      line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.5px;
-      display: flex; align-items: center; gap: 6px; justify-content: center;
-    }
-
+    .player-photo-glow { position: absolute; inset: -10px; background-color: var(--accent-gold); border-radius: 50%; filter: blur(15px); opacity: 0.15; }
+    .player-photo { width: 112px; height: 112px; border-radius: 50%; object-fit: cover; border: 4px solid var(--surface); background-color: var(--surface); position: relative; z-index: 10; box-shadow: 0 0 0 2px var(--accent-gold-glow); }
+    .player-base-price { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 800; letter-spacing: 0.5px; background-color: var(--bg); border: 1px solid var(--border); color: var(--accent-gold); margin-bottom: 12px; }
+    .player-name-title { font-size: 22px; font-weight: 800; color: var(--text-main); line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 6px; justify-content: center; }
     .player-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 4px; }
-    .tag {
-      padding: 6px 12px; border-radius: 8px;
-      font-size: 11px; font-weight: 700;
-      color: var(--text-muted);
-      background-color: var(--bg);
-      border: 1px solid var(--border);
-    }
+    .tag { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); background-color: var(--bg); border: 1px solid var(--border); }
 
     /* ============ Feed ============ */
     .feed-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
     .empty-state { font-size: 12px; color: var(--text-faint); text-align: center; padding: 24px 0; font-weight: 500; }
-
-    .feed-item {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 10px 12px; border-radius: 8px;
-      background-color: var(--surface-hover);
-      border: 1px solid var(--border-light);
-      font-size: 12px;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
+    .feed-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; background-color: var(--surface-hover); border: 1px solid var(--border-light); font-size: 12px; animation: fadeIn 0.3s ease; }
     .feed-item-text { color: var(--text-main); font-weight: 500; }
-    .feed-item-time {
-      font-size: 9px; font-weight: 700; color: var(--text-faint);
-      background-color: var(--bg); padding: 2px 8px; border-radius: 4px;
-      border: 1px solid var(--border); flex-shrink: 0;
-    }
+    .feed-item-time { font-size: 9px; font-weight: 700; color: var(--text-faint); background-color: var(--bg); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); flex-shrink: 0; }
 
-    /* ============ Screen headers (teams / players) ============ */
-    .screen-header {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding-bottom: 8px; border-bottom: 1px solid var(--border-light);
-    }
-    .screen-title {
-      font-size: 14px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
-      color: var(--text-muted); display: flex; align-items: center; gap: 6px;
-    }
+    /* ============ Screens ============ */
+    .screen-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-light); }
+    .screen-title { font-size: 14px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
 
-    /* ============ Teams dashboard ============ */
     .teams-dashboard { display: flex; flex-direction: column; gap: 12px; padding-bottom: 24px; }
-
-    .team-card {
-      border-radius: 16px;
-      background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
-      border: 1px solid var(--border-light);
-      padding: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .team-card-header {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);
-    }
+    .team-card { border-radius: 16px; background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%); border: 1px solid var(--border-light); padding: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .team-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); }
     .team-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .team-avatar { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 1px solid var(--border); background-color: var(--bg); flex-shrink: 0; padding: 2px;}
     .team-name { font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1; }
     .team-slots { font-size: 11px; color: var(--text-faint); font-weight: 600; margin-top: 4px; }
-
     .team-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; margin-bottom: 12px; }
     .team-stat { background-color: var(--bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-light); }
-    .team-stat-label {
-      display: block; font-size: 9px; color: var(--text-faint);
-      text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px;
-    }
+    .team-stat-label { display: block; font-size: 9px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
     .team-stat-value { font-size: 13px; font-weight: 800; color: var(--text-main); }
     .team-stat-value.is-purse { color: var(--accent-green); font-size: 14px;}
     .team-stat-value.is-maxbid { color: var(--accent-gold); }
-
     .team-roster { margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--border); display: flex; flex-direction: column; gap: 8px; }
     .roster-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
-    .roster-item {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 8px 12px; border-radius: 8px;
-      background-color: var(--surface-hover);
-      border: 1px solid var(--border-light);
-      font-size: 12px; cursor: pointer; transition: 0.2s;
-    }
+    .roster-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border-radius: 8px; background-color: var(--surface-hover); border: 1px solid var(--border-light); font-size: 12px; cursor: pointer; transition: 0.2s; }
     .roster-item:active { transform: scale(0.98); background-color: var(--border); }
-    
     .roster-player { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .roster-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid var(--border-light); }
     .roster-name { font-weight: 600; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .roster-price { color: var(--accent-gold); font-weight: 700; flex-shrink: 0; font-variant-numeric: tabular-nums;}
     .roster-empty { font-size: 11px; color: var(--text-faint); padding: 4px 0; font-style: italic; }
 
-    /* ============ Players directory ============ */
-    .directory-controls {
-      position: sticky; top: 0;
-      background-color: var(--bg);
-      padding-top: 4px; padding-bottom: 12px;
-      z-index: 10;
-      display: flex; flex-direction: column; gap: 10px;
-    }
-
+    .directory-controls { position: sticky; top: 0; background-color: var(--bg); padding-top: 4px; padding-bottom: 12px; z-index: 10; display: flex; flex-direction: column; gap: 10px; }
     .search-wrap { position: relative; }
-    .search-input {
-      width: 100%;
-      background-color: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: var(--text-main);
-      transition: 0.2s;
-    }
+    .search-input { width: 100%; background-color: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: var(--text-main); transition: 0.2s; }
     .search-input::placeholder { color: var(--text-faint); }
     .search-input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(96,165,250,0.1); }
     .search-icon { position: absolute; right: 14px; top: 14px; font-size: 11px; pointer-events: none; }
-
     .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; }
-    .filter-btn {
-      flex-shrink: 0;
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background-color: var(--bg);
-      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
-      color: var(--text-muted);
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
+    .filter-btn { flex-shrink: 0; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--bg); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); transition: all 0.2s ease; cursor: pointer; }
     .filter-btn.active { background: var(--surface-hover); border-color: var(--border); color: var(--text-main); }
 
     .players-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 24px; }
-    .player-card {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 10px 12px; border-radius: 12px;
-      background-color: var(--surface);
-      border: 1px solid var(--border-light);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      cursor: pointer; transition: 0.2s;
-    }
+    .player-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 12px; background-color: var(--surface); border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: 0.2s; }
     .player-card:active { background-color: var(--surface-hover); border-color: var(--border); transform: scale(0.98); }
-    
     .player-card-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;}
     .player-rank { font-size: 11px; font-weight: 700; color: var(--text-faint); width: 18px; text-align: center; flex-shrink: 0; }
-    .player-avatar {
-      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
-      border: 2px solid var(--bg); background-color: var(--bg); flex-shrink: 0;
-    }
-    .player-name-row {
-      font-size: 13px; font-weight: 700; color: var(--text-main);
-      display: flex; align-items: center; gap: 4px; margin-bottom: 2px;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
+    .player-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--bg); background-color: var(--bg); flex-shrink: 0; }
+    .player-name-row { font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 4px; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .player-skills { display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--text-muted); font-weight: 600;}
-
     .player-card-right { text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; }
     .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
     .status-badge.is-sold { color: var(--accent-green); background-color: var(--accent-green-glow); }
     .status-badge.is-unsold { color: var(--accent-red); background-color: rgba(248,113,113,0.15); }
     .status-badge.is-pending { color: var(--accent-blue); background-color: rgba(96,165,250,0.15); }
-
-    .player-team-name {
-      font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px;
-    }
+    .player-team-name { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px; }
     .player-sold-price { color: var(--accent-gold); font-size: 12px; font-weight: 800; display: block; margin-top: 2px; }
     .player-round { font-size: 10px; color: var(--text-faint); font-weight: 600; display: block; margin-top: 4px; }
 
     /* ============ Bottom navigation ============ */
-    .bottom-nav {
-      flex-shrink: 0;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      background-color: var(--surface);
-      border-top: 1px solid var(--border);
-      z-index: 20;
-    }
-    .tab {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 14px 0;
-      background: none; border: none;
-      color: var(--text-faint);
-      font-weight: 700;
-      transition: all 0.2s ease;
-      position: relative;
-      border-top: 2px solid transparent;
-      cursor: pointer;
-    }
+    .bottom-nav { flex-shrink: 0; display: flex; background-color: var(--surface); border-top: 1px solid var(--border); z-index: 20; }
+    .tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 0; background: none; border: none; color: var(--text-faint); font-weight: 700; transition: all 0.2s ease; position: relative; border-top: 2px solid transparent; cursor: pointer; }
     .tab:hover { color: var(--text-muted); }
     .tab.active { color: var(--accent-gold); border-top-color: var(--accent-gold); }
     .tab-icon { font-size: 18px; line-height: 1; margin-bottom: 4px; }
     .tab-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
 
-    /* ============ Shared Overlay Layout ============ */
-    .result-overlay {
-      position: fixed; inset: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: center;
-      background-color: rgba(9, 9, 11, 0.85);
-      backdrop-filter: blur(8px);
-      opacity: 0; visibility: hidden; pointer-events: none;
-      transition: all 0.3s ease;
-    }
+    /* ============ Overlay Layouts ============ */
+    .result-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background-color: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease; }
     .result-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
-
-    .overlay-card {
-      position: relative;
-      z-index: 1;
-      width: 320px;
-      padding: 32px;
-      text-align: center;
-      border-radius: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-      overflow: hidden;
-      animation: soldWrapPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-    }
-    @keyframes soldWrapPop {
-      0% { transform: scale(0.82) rotate(-3deg); }
-      60% { transform: scale(1.06) rotate(2deg); }
-      100% { transform: scale(1) rotate(0deg); }
-    }
-
+    .overlay-card { position: relative; z-index: 1; width: 320px; padding: 32px; text-align: center; border-radius: 24px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 24px 64px rgba(0,0,0,0.5); overflow: hidden; animation: soldWrapPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+    @keyframes soldWrapPop { 0% { transform: scale(0.82) rotate(-3deg); } 60% { transform: scale(1.06) rotate(2deg); } 100% { transform: scale(1) rotate(0deg); } }
     .overlay-content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; }
-    .overlay-badge {
-      display: inline-flex; padding: 10px 32px; border-radius: 100px;
-      color: var(--accent-green);
-      background-color: var(--accent-green-glow);
-      border: 1px solid rgba(52,211,153,0.3);
-      font-size: 16px; font-weight: 800; letter-spacing: 2px;
-      margin-bottom: 24px;
-    }
-    .overlay-name {
-      font-size: 24px; font-weight: 800; color: var(--text-main);
-      letter-spacing: -0.5px; margin-bottom: 16px;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%;
-    }
+    .overlay-badge { display: inline-flex; padding: 10px 32px; border-radius: 100px; color: var(--accent-green); background-color: var(--accent-green-glow); border: 1px solid rgba(52,211,153,0.3); font-size: 16px; font-weight: 800; letter-spacing: 2px; margin-bottom: 24px; }
+    .overlay-name { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
     .overlay-divider { width: 64px; height: 3px; background: var(--accent-green); margin-bottom: 24px; border-radius: 2px;}
     .overlay-label { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .overlay-meta { font-size: 20px; font-weight: 800; color: var(--accent-gold); }
 
-    /* ============ Confetti ============ */
     .confetti-wrap { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-    .confetti-wrap span {
-      position: absolute; left: 50%; top: 50%;
-      width: 6px; height: 16px; border-radius: 4px;
-      background: hsl(calc(var(--i) * 38), 90%, 65%);
-      opacity: 0;
-      transform: translate(-50%, -50%) rotate(var(--rot));
-      animation: confettiWrap 1.35s ease-out var(--delay) forwards;
-    }
-    @keyframes confettiWrap {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(var(--rot)); }
-      18% { opacity: 1; }
-      100% { opacity: 0; transform: translate(calc(-50% + var(--x)), -210px) rotate(calc(var(--rot) + 420deg)); }
-    }
+    .confetti-wrap span { position: absolute; left: 50%; top: 50%; width: 6px; height: 16px; border-radius: 4px; background: hsl(calc(var(--i) * 38), 90%, 65%); opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot)); animation: confettiWrap 1.35s ease-out var(--delay) forwards; }
+    @keyframes confettiWrap { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(var(--rot)); } 18% { opacity: 1; } 100% { opacity: 0; transform: translate(calc(-50% + var(--x)), -210px) rotate(calc(var(--rot) + 420deg)); } }
 
-    /* ============ Unsold Overlay Styles ============ */
     .overlay-card-unsold { animation: unsoldStamp 0.45s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
-    @keyframes unsoldStamp {
-      0% { transform: scale(1.8) rotate(10deg); opacity: 0; }
-      100% { transform: scale(1) rotate(0deg); opacity: 1; }
-    }
-    .overlay-badge-unsold {
-      color: var(--accent-red);
-      background-color: rgba(248,113,113,0.15);
-      border: 1px solid rgba(248,113,113,0.3);
-    }
+    @keyframes unsoldStamp { 0% { transform: scale(1.8) rotate(10deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+    .overlay-badge-unsold { color: var(--accent-red); background-color: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.3); }
     .overlay-divider-unsold { background: var(--accent-red); }
+    .empty-state { font-size: 13px; color: var(--text-faint); text-align: center; padding: 32px 0; font-weight: 500; }
+
+    /* Player Detail Overview Modal Style */
+    .player-modal-card {
+      width: 420px; padding: 32px; border-radius: 24px; background: var(--surface); border: 1px solid var(--border);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6); position: relative; text-align: center;
+    }
+    .modal-close-btn {
+      position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.2s;
+    }
+    .modal-close-btn:hover { color: var(--text-main); background: var(--surface-hover); }
 
     /* ============ Toast Notification ============ */
     .toast-msg {
@@ -716,52 +310,64 @@
 </head>
 <body>
 
-  <!-- Premium Splash Screen -->
+  <!-- Splash Screen -->
   <div id="splashScreen" class="fixed inset-0 bg-[#09090b] z-[999] flex flex-col items-center justify-center transition-opacity duration-700 backdrop-blur-sm">
     <div class="flex flex-col items-center w-full max-w-2xl px-6 animate-[splashElegantIn_1.5s_cubic-bezier(0.16,1,0.3,1)_forwards]">
       
-      <!-- Logo with subtle atmospheric glow and generous spacing -->
       <div class="relative mb-10">
           <div class="absolute inset-0 bg-[var(--accent-gold)] blur-[80px] opacity-15 rounded-full scale-150"></div>
-          <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify Logo" class="relative w-40 h-40 sm:w-52 sm:h-52 object-contain rounded-3xl shadow-[0_0_50px_rgba(251,191,36,0.1)] transform transition-all hover:scale-105 duration-700" />
+          <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify Logo" class="relative w-32 h-32 sm:w-40 sm:h-40 object-contain rounded-3xl shadow-[0_0_50px_rgba(251,191,36,0.1)] transform transition-all hover:scale-105 duration-700" onerror="this.src='https://placehold.co/200x200/18181b/fbbf24?text=Auctify'" />
       </div>
       
-      <!-- Typography with enhanced vertical rhythm -->
       <div class="text-center space-y-5 mb-14">
           <h1 class="text-5xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-100 to-[var(--accent-gold)] tracking-tight drop-shadow-lg">
             Auctify
           </h1>
           <p class="text-[var(--text-muted)] font-semibold tracking-[0.3em] uppercase text-[10px] sm:text-xs opacity-80">
-            Drafting Your Championship Team
+            Live Auction Viewer
           </p>
       </div>
 
-      <!-- Get Started Button with modern interactive sweep -->
-      <button onclick="startApp()" class="group relative inline-flex items-center justify-center px-12 py-4 font-bold text-black uppercase tracking-[0.2em] text-sm bg-gradient-to-r from-[var(--accent-gold)] to-yellow-400 rounded-full overflow-hidden shadow-[0_0_20px_rgba(251,191,36,0.25)] transition-all hover:scale-105 hover:shadow-[0_0_35px_rgba(251,191,36,0.4)] opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards]">
-          <span class="relative z-10">Get Started</span>
+      <button onclick="enterLobby()" class="group relative inline-flex items-center justify-center px-12 py-4 font-bold text-black uppercase tracking-[0.2em] text-sm bg-gradient-to-r from-[var(--accent-gold)] to-yellow-400 rounded-full overflow-hidden shadow-[0_0_20px_rgba(251,191,36,0.25)] transition-all hover:scale-105 hover:shadow-[0_0_35px_rgba(251,191,36,0.4)] opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards]">
+          <span class="relative z-10">Enter Viewer</span>
           <div class="absolute inset-0 h-full w-full bg-white/30 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
       </button>
       
     </div>
-
-    <!-- Footer pushed further down to keep the center clean -->
     <div class="absolute bottom-12 flex flex-col items-center opacity-50 hover:opacity-100 transition-opacity duration-500">
       <p class="text-[var(--text-faint)] text-[9px] font-bold uppercase tracking-[0.2em] mb-1.5">Developed by</p>
       <p class="text-[var(--text-muted)] text-xs font-semibold tracking-[0.1em]">Raghav Patel</p>
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
   <div id="toastContainer" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; width: 90%; max-width: 400px;"></div>
 
-  <div id="app" class="app-shell">
+  <!-- ================= LOBBY VIEW ================= -->
+  <div id="lobbyView" class="app-shell" style="display: none;">
+    <div class="flex items-center gap-3 p-4 border-b border-[var(--border-light)] bg-[var(--surface)] relative z-10 shadow-sm">
+        <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify" class="w-10 h-10 object-contain rounded-lg bg-[var(--bg)] border border-[var(--border)] p-1" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=A'">
+        <div>
+            <h2 class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[var(--accent-gold)] tracking-tight">Auctify Viewer</h2>
+            <p class="text-[10px] text-[var(--text-faint)] font-bold uppercase tracking-widest mt-0.5">Select a Workspace</p>
+        </div>
+    </div>
+    <div id="lobbyList" class="flex-1 overflow-y-auto p-4 pb-12 no-scrollbar" style="touch-action: pan-y;">
+        <div class="text-center text-[var(--text-faint)] text-xs mt-10">Loading workspaces...</div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN APP VIEW ================= -->
+  <div id="appView" class="app-shell" style="display: none;">
 
     <header class="app-header">
       <div class="header-left">
-        <div class="icon-badge">🏏</div>
+        <button class="icon-badge" onclick="exitToLobby()" title="Back to Lobby">
+          ⬅
+        </button>
+        <img id="headerTournamentLogo" src="" alt="Tournament Logo" class="w-10 h-10 object-cover rounded-xl bg-[var(--bg)] border border-[var(--border-light)] p-0.5 hidden shrink-0" />
         <div class="header-text">
           <h1 class="header-title">
-            AUCTION <span class="live-tag">LIVE</span>
+            AUCTION
           </h1>
           <p id="headerTournament" class="header-tournament">Loading tournament...</p>
         </div>
@@ -805,7 +411,7 @@
 
     <main id="screenWrap">
 
-      <section class="screen active" id="screenLive">
+      <section class="screen" id="screenLive">
         <div class="card">
           <div class="card-header">
             <h2 class="card-title"><span class="pulse-dot"></span> Live Block</h2>
@@ -814,7 +420,7 @@
           <div class="current-player-area" id="currentPlayerArea">
             <div class="player-placeholder-avatar">👤</div>
             <h3 class="player-placeholder-title">No Player Loaded</h3>
-            <p class="player-placeholder-text">Waiting for the auction administrator to reveal the next player...</p>
+            <p class="player-placeholder-text">Waiting for the administrator to begin...</p>
           </div>
         </div>
 
@@ -863,21 +469,22 @@
     </main>
 
     <nav class="bottom-nav pb-safe">
-      <button class="tab active" data-screen="screenLive">
+      <button class="tab active" id="tabLive" data-screen="screenLive">
         <span class="tab-icon">🎯</span>
         <span class="tab-label">Live Block</span>
       </button>
-      <button class="tab" data-screen="screenTeams">
+      <button class="tab" id="tabTeams" data-screen="screenTeams">
         <span class="tab-icon">🏆</span>
         <span class="tab-label">Teams</span>
       </button>
-      <button class="tab" data-screen="screenPlayers">
+      <button class="tab" id="tabPlayers" data-screen="screenPlayers">
         <span class="tab-icon">👥</span>
         <span class="tab-label">Directory</span>
       </button>
     </nav>
   </div>
 
+  <!-- SOLD OVERLAY -->
   <div id="resultOverlay" class="result-overlay">
     <div class="overlay-card">
       <div class="overlay-content">
@@ -890,6 +497,7 @@
     </div>
   </div>
 
+  <!-- UNSOLD OVERLAY -->
   <div id="unsoldOverlay" class="result-overlay">
     <div class="overlay-card overlay-card-unsold">
       <div class="overlay-content">
@@ -903,12 +511,13 @@
 
   <!-- PLAYER OVERVIEW MODAL -->
   <div id="playerOverviewModal" class="result-overlay">
-    <div class="overlay-card" style="padding: 24px; animation: soldWrapPop 0.4s ease;">
-      <button id="closeOverviewBtn" style="position:absolute; top:12px; right:12px; background:var(--bg); border:1px solid var(--border); color:var(--text-muted); width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size: 14px; transition: 0.2s;">✕</button>
+    <div class="player-modal-card">
+      <button class="modal-close-btn" id="closeOverviewBtn">✕</button>
       <div id="overviewContent"></div>
     </div>
   </div>
 
+  <!-- INFO MODAL -->
   <div id="infoModal" class="result-overlay">
     <div class="overlay-card" style="padding: 24px; animation: soldWrapPop 0.4s ease;">
       <h2 style="font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 12px;">About Software</h2>
@@ -923,27 +532,31 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, doc, collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyA33l9KR8Rnjob9QHfZbEa4aSHaNdDc0r0",
-  authDomain: "auctify-7f830.firebaseapp.com",
-  databaseURL: "https://auctify-7f830-default-rtdb.firebaseio.com",
-  projectId: "auctify-7f830",
-  storageBucket: "auctify-7f830.firebasestorage.app",
-  messagingSenderId: "188915754238",
-  appId: "1:188915754238:web:167e869ad87175da7971af",
-  measurementId: "G-2DFKFVN3QL"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyBB9VJE5KQ7hNkuGVp1KYoUo6GHlblC6eI",
+      authDomain: "cricket-auction-e470e.firebaseapp.com",
+      databaseURL: "https://cricket-auction-e470e-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "cricket-auction-e470e",
+      storageBucket: "cricket-auction-e470e.firebasestorage.app",
+      messagingSenderId: "939681299699",
+      appId: "1:939681299699:web:8c62302c035251fa37cb86",
+      measurementId: "G-5T553ZD6BQ"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auctionsCol = collection(db, "auctions");
 
-    const SETTINGS_REF = doc(db, "auction_meta", "settings");
-    const teamsCol = collection(db, "teams");
-    const playersCol = collection(db, "players");
-
+    let currentAuctionId = null;
+    let SETTINGS_REF = null;
+    let teamsCol = null;
+    let playersCol = null;
+    
+    let unsubSettings, unsubTeams, unsubPlayers;
+    
+    // Core State Map
     const state = {
       settings: null,
       teams: [],
@@ -953,36 +566,125 @@ const firebaseConfig = {
       prevStatusMap: new Map(),
       prevTeamTopUpMap: new Map(),
       activeFilter: "All",
-      searchQuery: ""
+      searchQuery: "",
+      isFirstPlayersLoad: true 
     };
 
+    let screenOrder = ["screenLive", "screenTeams", "screenPlayers"];
+    let activeScreenIndex = -1;
+
     const $ = id => document.getElementById(id);
+    function money(value) { return Number(value || 0).toLocaleString("en-IN") + " PTS"; }
+    function placeholder(text = "?") { return `https://placehold.co/150x150/18181b/a1a1aa?text=${encodeURIComponent(text || "?")}`; }
 
-    // Number conversion utility
-    function money(value) {
-      return Number(value || 0).toLocaleString("en-IN") + " PTS";
-    }
-
-    // High performance placeholder image generator
-    function placeholder(text = "?") {
-      return `https://placehold.co/150x150/18181b/a1a1aa?text=${encodeURIComponent(text || "?")}`;
-    }
-
-    // Show Toast Notification
     function showToast(message) {
       const container = $("toastContainer");
       if (!container) return;
-      
       const toast = document.createElement("div");
       toast.className = "toast-msg";
       toast.innerHTML = message;
       container.appendChild(toast);
-      
-      // Auto dismiss after animation
       setTimeout(() => toast.remove(), 4000);
     }
 
-    // Dynamic state computation for team card analytics
+    // ============================================
+    // LOBBY SETUP
+    // ============================================
+    window.loadLobby = async () => {
+      const snap = await getDocs(auctionsCol);
+      const wrap = $("lobbyList");
+      
+      if (snap.empty) {
+        wrap.innerHTML = `
+          <div class="col-span-full flex flex-col items-center justify-center py-20 px-4 text-center">
+            <div class="w-20 h-20 mb-6 opacity-30 grayscale">
+              <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify" class="w-full h-full object-contain drop-shadow-md" onerror="this.src='https://placehold.co/200x200/18181b/fbbf24?text=Auctify'" />
+            </div>
+            <h3 class="text-lg font-bold text-[var(--text-main)] mb-2">No active workspaces</h3>
+            <p class="text-[var(--text-faint)] text-xs font-medium max-w-[250px]">The administrator hasn't created any tournaments yet. Please check back later.</p>
+          </div>`;
+        return;
+      }
+
+      let html = "";
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        let statusText = "Upcoming";
+        let statusClass = "bg-[rgba(96,165,250,0.1)] text-[var(--accent-blue)] border-[rgba(96,165,250,0.2)]"; 
+
+        if (data.auctionEnded || data.status === "Ended") {
+            statusText = "Ended";
+            statusClass = "bg-[rgba(248,113,113,0.1)] text-[var(--accent-red)] border-[rgba(248,113,113,0.2)]"; 
+        } else if (data.status === "Live" || data.livePlayerId) {
+            statusText = "Live";
+            statusClass = "bg-[rgba(52,211,153,0.1)] text-[var(--accent-green)] border-[rgba(52,211,153,0.2)] animate-pulse"; 
+        }
+
+        let formattedDate = 'TBD';
+        if(data.date) formattedDate = new Date(data.date).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+
+        const logoImage = data.tournamentLogoUrl || placeholder(data.tournamentName?.[0] || 'T');
+
+        html += `
+          <div class="bg-[var(--surface)] border border-[var(--border-light)] rounded-2xl p-4 mb-4 flex flex-col gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.2)] active:scale-[0.98] transition-transform cursor-pointer" onclick="joinAuction('${docSnap.id}')">
+             <div class="flex justify-between items-start gap-2">
+                <div class="flex items-center gap-3 min-w-0">
+                   <img src="${logoImage}" class="w-10 h-10 rounded-lg object-cover bg-[var(--bg)] border border-[var(--border-light)] p-0.5 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=T'"/>
+                   <h3 class="text-base font-extrabold text-white leading-tight line-clamp-2">${data.tournamentName || 'Unnamed Tournament'}</h3>
+                </div>
+                <span class="px-2 py-1 rounded-[6px] text-[9px] font-black uppercase tracking-wider border ${statusClass} shrink-0">${statusText}</span>
+             </div>
+             <div class="flex flex-col gap-1 text-[11px] text-[var(--text-muted)] font-semibold bg-[var(--surface-hover)] border border-[var(--border)] p-2.5 rounded-xl mt-1">
+                <span class="flex items-center gap-1.5"><span class="text-sm">📅</span> ${formattedDate} ${data.time ? '• ' + data.time : ''}</span>
+                <span class="flex items-center gap-1.5 truncate"><span class="text-sm">📍</span> ${data.venue || 'TBD'}, ${data.city || 'TBD'}</span>
+             </div>
+             <div class="grid grid-cols-4 gap-2 text-center mt-1">
+                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Teams</div><div class="text-xs font-bold text-white">${data.numTeams || 0}</div></div>
+                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Players</div><div class="text-xs font-bold text-white">${data.numPlayers || 0}</div></div>
+                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Base</div><div class="text-[11px] font-bold text-[var(--accent-gold)]">${Number(data.basePrice||0).toLocaleString()}</div></div>
+                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Purse</div><div class="text-[11px] font-bold text-[var(--accent-green)]">${Number(data.teamPurse||0).toLocaleString()}</div></div>
+             </div>
+          </div>
+        `;
+      });
+      wrap.innerHTML = html;
+    };
+
+    window.joinAuction = (id) => {
+       $("lobbyView").style.display = "none";
+       $("appView").style.display = "flex";
+       
+       currentAuctionId = id;
+       SETTINGS_REF = doc(db, "auctions", id);
+       teamsCol = collection(db, "auctions", id, "teams");
+       playersCol = collection(db, "auctions", id, "players");
+
+       initRealtimeListeners();
+    };
+
+    window.exitToLobby = () => {
+       if (unsubSettings) unsubSettings();
+       if (unsubTeams) unsubTeams();
+       if (unsubPlayers) unsubPlayers();
+       
+       state.settings = null;
+       state.teams = [];
+       state.players = [];
+       state.feed = [];
+       state.prevStatusMap.clear();
+       state.isFirstPlayersLoad = true;
+       activeScreenIndex = -1;
+       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active", "left", "right"));
+
+       $("appView").style.display = "none";
+       $("lobbyView").style.display = "flex";
+       loadLobby();
+    };
+
+    // ============================================
+    // APPLICATION LOGIC
+    // ============================================
+
     function getTeamStats(team) {
       const s = state.settings || {};
       const bought = state.players.filter(p => p.status === "Sold" && p.soldToTeamId === team.id);
@@ -998,48 +700,80 @@ const firebaseConfig = {
       const slotsLeft = Math.max(0, perTeam - slotsFilled);
       const purseLeft = Math.max(0, purse - spent);
       
-      // Reserve base price only for the *other* remaining slots (slotsLeft - 1)
       const reserve = (slotsLeft - 1) * base; 
       const maxBid = slotsLeft > 0 ? Math.max(0, purseLeft - reserve) : 0;
 
       return { bought, spent, purseLeft, slotsFilled, slotsLeft, maxBid, topUpAmount };
     }
 
-    // Real-time Logger System
     function pushFeed(text) {
       state.feed.unshift({ text, time: new Date() });
       state.feed = state.feed.slice(0, 30);
       renderFeed();
     }
 
-    // Summary Metric Bar renderer
+    function updateNavVisibility() {
+      const s = state.settings || {};
+      const isEnded = s.auctionEnded || s.status === "Ended";
+      
+      if (isEnded) {
+          $("tabLive").style.display = "none";
+          screenOrder = ["screenTeams", "screenPlayers"];
+          
+          if (activeScreenIndex === -1 || activeScreenIndex === 0) { 
+              switchScreen("screenTeams");
+          } else {
+              const currentId = document.querySelector(".screen.active")?.id;
+              if(currentId === "screenLive") switchScreen("screenTeams");
+              else switchScreen(currentId); 
+          }
+      } else {
+          $("tabLive").style.display = "flex";
+          screenOrder = ["screenLive", "screenTeams", "screenPlayers"];
+          if (activeScreenIndex === -1) {
+              switchScreen("screenLive");
+          } else {
+              const currentId = document.querySelector(".screen.active")?.id || "screenLive";
+              switchScreen(currentId);
+          }
+      }
+    }
+
     function renderSummary() {
       const s = state.settings || {};
-      const sold = state.players.filter(p => p.status === "Sold").length;
-      const unsold = state.players.filter(p => p.status === "Unsold").length;
-      const pending = state.players.filter(p => !p.status || p.status === "Pending").length;
-
-      document.title = `${s.tournamentName || 'Tournament'} - Live Auction`;
-      $("headerTournament").textContent = s.tournamentName || "Live Auction Dashboard";
+      document.title = `${s.tournamentName || 'Tournament'} - Live Auction`; 
+      $("headerTournament").textContent = s.tournamentName || "Live Auction";
       $("sTeams").textContent = s.numTeams || state.teams.length || 0;
       $("sPlayers").textContent = s.numPlayers || state.players.length || 0;
       $("sPurse").textContent = Number(s.teamPurse || 0).toLocaleString("en-IN");
       $("sRound").textContent = s.currentRound || 1;
-      $("sSold").textContent = sold;
-      $("sUnsold").textContent = unsold;
-      $("sPending").textContent = pending;
+      $("sSold").textContent = state.players.filter(p => p.status === "Sold").length;
+      $("sUnsold").textContent = state.players.filter(p => p.status === "Unsold").length;
+      $("sPending").textContent = state.players.filter(p => !p.status || p.status === "Pending").length;
+
+      if(s.tournamentLogoUrl) {
+          $("headerTournamentLogo").src = s.tournamentLogoUrl;
+          $("headerTournamentLogo").classList.remove("hidden");
+      } else {
+          $("headerTournamentLogo").src = "";
+          $("headerTournamentLogo").classList.add("hidden");
+      }
 
       const badge = $("liveBadge");
-      if (s.auctionEnded) {
-        badge.textContent = "● COMPLETE";
+      if (s.auctionEnded || s.status === "Ended") {
+        badge.textContent = "● ENDED";
         badge.className = "live-badge is-complete";
-      } else {
+      } else if (s.status === "Live" || s.livePlayerId) {
         badge.textContent = "● LIVE";
         badge.className = "live-badge";
+      } else {
+        badge.textContent = "● UPCOMING";
+        badge.className = "live-badge is-upcoming";
       }
+
+      updateNavVisibility();
     }
 
-    // Active block renderer (Screen 1)
     function renderCurrentPlayer() {
       const liveId = state.settings?.livePlayerId || "";
       const player = state.players.find(p => p.id === liveId);
@@ -1050,9 +784,9 @@ const firebaseConfig = {
         wrap.innerHTML = `
           <div class="player-placeholder-avatar">👤</div>
           <h3 class="player-placeholder-title">No Player On The Block</h3>
-          <p class="player-placeholder-text">${state.settings?.auctionEnded ? "The auction has concluded." : "Waiting for administrator to release next player..."}</p>
+          <p class="player-placeholder-text">Waiting for the administrator to select the next player...</p>
         `;
-        badge.textContent = state.settings?.auctionEnded ? "Complete" : "Awaiting";
+        badge.textContent = "Awaiting";
         badge.className = "status-pill is-awaiting";
         return;
       }
@@ -1066,17 +800,12 @@ const firebaseConfig = {
           <div class="player-photo-glow"></div>
           <img class="player-photo" src="${player.imageUrl || placeholder(player.name?.[0])}" alt="${player.name}">
         </div>
-
-        <div class="player-base-price">
-          💰 Base Price: ${money(player.basePrice || state.settings?.basePrice)}
-        </div>
-
+        <div class="player-base-price">💰 Base Price: ${money(player.basePrice || state.settings?.basePrice)}</div>
         <h3 class="player-name-title">
           ${player.isIconPlayer ? '<span style="color: var(--accent-gold);">⭐</span>' : ''}
           ${player.isChitPlayer ? '<span style="color: var(--accent-gold);">🎟️</span>' : ''}
           ${player.name}
         </h3>
-
         <div class="player-tags">
           <span class="tag">🏏 Bat: ${player.batting || "-"}</span>
           <span class="tag">🥎 Bowl: ${player.bowling || "-"}</span>
@@ -1091,20 +820,19 @@ const firebaseConfig = {
       return "status-badge is-pending";
     }
 
-    // Show details modal (Player Overview)
     function openPlayerOverview(playerId) {
       const p = state.players.find(item => item.id === playerId);
       if (!p) return;
 
       const isSold = p.status === "Sold";
       $("overviewContent").innerHTML = `
-        <div style="position:relative; margin-bottom: 16px; display:inline-block;">
-          <img src="${p.imageUrl || placeholder(p.name?.[0])}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); margin: 0 auto;">
+        <div style="position:relative; margin-bottom: 20px; display:inline-block;">
+          <img src="${p.imageUrl || placeholder(p.name?.[0])}" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); margin: 0 auto;">
         </div>
-        <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
           ${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${p.name}
         </h2>
-        <div style="margin-bottom: 16px;"><span class="${statusStyle(p.status)}">${p.status || "Pending"}</span></div>
+        <div style="margin-bottom: 20px;"><span class="${statusStyle(p.status)}">${p.status || "Pending"}</span></div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; background: var(--bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); font-size: 11px; margin-bottom: 16px;">
           <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Batting</span><b>${p.batting || "-"}</b></div>
@@ -1124,7 +852,6 @@ const firebaseConfig = {
       $("playerOverviewModal").classList.add("show");
     }
 
-    // Teams presentation page (Screen 2)
     function renderTeams() {
       const wrap = $("teamsDashboard");
       $("teamCountBadge").textContent = state.teams.length;
@@ -1134,14 +861,11 @@ const firebaseConfig = {
         return;
       }
 
-      const sortedTeams = [...state.teams].sort((a, b) =>
-        (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" })
-      );
+      const sortedTeams = [...state.teams].sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }));
 
       wrap.innerHTML = sortedTeams.map(team => {
         const stats = getTeamStats(team);
         const logo = team.logoUrl || placeholder(team.name?.[0] || "T");
-
         const rosterHtml = stats.bought.length
           ? stats.bought.map(p => `
               <div class="roster-item" data-player-id="${p.id}">
@@ -1166,51 +890,53 @@ const firebaseConfig = {
               </div>
             </div>
             <div class="team-stats-grid">
-              <div class="team-stat">
-                <span class="team-stat-label">Purse Left</span>
-                <b class="team-stat-value is-purse">${money(stats.purseLeft)}</b>
-              </div>
-              <div class="team-stat">
-                <span class="team-stat-label">Max Bid</span>
-                <b class="team-stat-value is-maxbid">${money(stats.maxBid)}</b>
-              </div>
-              <div class="team-stat">
-                <span class="team-stat-label">Spent</span>
-                <b class="team-stat-value">${money(stats.spent)}</b>
-              </div>
-              <div class="team-stat">
-                <span class="team-stat-label">Slots Left</span>
-                <b class="team-stat-value">${stats.slotsLeft}</b>
-              </div>
+              <div class="team-stat"><span class="team-stat-label">Purse Left</span><b class="team-stat-value is-purse">${money(stats.purseLeft)}</b></div>
+              <div class="team-stat"><span class="team-stat-label">Max Bid</span><b class="team-stat-value is-maxbid">${money(stats.maxBid)}</b></div>
+              <div class="team-stat"><span class="team-stat-label">Spent</span><b class="team-stat-value">${money(stats.spent)}</b></div>
+              <div class="team-stat"><span class="team-stat-label">Slots Left</span><b class="team-stat-value">${stats.slotsLeft}</b></div>
             </div>
-            <div class="team-roster">
-              <h4 class="roster-title">Players (${stats.bought.length})</h4>
-              ${rosterHtml}
-            </div>
+            <div class="team-roster"><h4 class="roster-title">Players (${stats.bought.length})</h4>${rosterHtml}</div>
           </article>
         `;
       }).join("");
 
-      // Attach Roster Item Click Listeners
       wrap.querySelectorAll('.roster-item[data-player-id]').forEach(elem => {
         elem.addEventListener('click', () => openPlayerOverview(elem.dataset.playerId));
       });
     }
 
-    // Interactive directory page with search/status filters (Screen 3)
+    function buildPlayerCardHtml(p, rank) {
+      const isSold = p.status === "Sold";
+
+      return `
+        <article class="player-card" data-player-id="${p.id}">
+          <div class="player-card-left">
+            <span class="player-rank">${rank}</span>
+            <img class="player-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}">
+            <div>
+              <h3 class="player-name-row">${p.isIconPlayer?'⭐ ':''}${p.isChitPlayer?'🎟️ ':''}${p.name}</h3>
+              <div class="player-skills"><span>🏏 ${p.batting||"-"}</span><span>🥎 ${p.bowling||"-"}</span></div>
+            </div>
+          </div>
+
+          <div class="player-card-right">
+            <span class="${statusStyle(p.status)}">${p.status || "Pending"}</span>
+            ${isSold ? `<span class="player-team-name">${p.soldToTeamName}</span><strong class="player-sold-price">${money(p.soldPrice)}</strong>` : `<span class="player-round">Round ${p.auctionRound||1}</span>`}
+          </div>
+        </article>`;
+    }
+
     function renderPlayers() {
       const wrap = $("playersList");
-
       let filtered = state.players.filter(p => {
-        const matchesStatus = (state.activeFilter === "All") ||
-                              (state.activeFilter === "Sold" && p.status === "Sold") ||
-                              (state.activeFilter === "Unsold" && p.status === "Unsold") ||
-                              (state.activeFilter === "Pending" && (!p.status || p.status === "Pending"));
+        let mStatus = false;
+        if (state.activeFilter === "All") mStatus = true;
+        else if (state.activeFilter === "Sold") mStatus = p.status === "Sold";
+        else if (state.activeFilter === "Unsold") mStatus = p.status === "Unsold";
+        else if (state.activeFilter === "Pending") mStatus = (!p.status || p.status === "Pending");
 
-        const matchesSearch = !state.searchQuery ||
-                             (p.name || "").toLowerCase().includes(state.searchQuery.toLowerCase());
-
-        return matchesStatus && matchesSearch;
+        const mSearch = !state.searchQuery || (p.name || "").toLowerCase().includes(state.searchQuery.toLowerCase());
+        return mStatus && mSearch;
       });
 
       $("playerTableBadge").textContent = filtered.length;
@@ -1220,59 +946,26 @@ const firebaseConfig = {
         return;
       }
 
-      const sorted = [...filtered].sort((a, b) =>
-        (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" })
-      );
+      const sorted = [...filtered].sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }));
+      
+      wrap.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          ${sorted.map((p, idx) => buildPlayerCardHtml(p, idx + 1)).join("")}
+        </div>
+      `;
 
-      wrap.innerHTML = sorted.map((p, i) => {
-        const isSold = p.status === "Sold";
-        const metaLine = isSold
-          ? `<strong class="player-sold-price">${money(p.soldPrice)}</strong>`
-          : `<span class="player-round">Round ${p.auctionRound || 1}</span>`;
-
-        return `
-          <article class="player-card" data-player-id="${p.id}">
-            <div class="player-card-left">
-              <span class="player-rank">${i + 1}</span>
-              <img class="player-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${p.name}">
-              <div>
-                <h3 class="player-name-row">
-                  ${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${p.name || "Player"}
-                </h3>
-                <div class="player-skills">
-                  <span>🏏 ${p.batting || "-"}</span>
-                  <span>🥎 ${p.bowling || "-"}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="player-card-right">
-              <span class="${statusStyle(p.status)}">
-                ${p.status || "Pending"}
-              </span>
-              ${isSold ? `<span class="player-team-name">${p.soldToTeamName}</span>` : ""}
-              ${metaLine}
-            </div>
-          </article>
-        `;
-      }).join("");
-
-      // Attach Player Card Click Listeners
-      wrap.querySelectorAll('.player-card[data-player-id]').forEach(elem => {
+      wrap.querySelectorAll('.player-card').forEach(elem => {
         elem.addEventListener('click', () => openPlayerOverview(elem.dataset.playerId));
       });
     }
 
-    // Dynamic feed display
     function renderFeed() {
       const list = $("feedList");
       $("feedCountBadge").textContent = state.feed.length;
-
       if (!state.feed.length) {
         list.innerHTML = `<li class="empty-state">Waiting for updates...</li>`;
         return;
       }
-
       list.innerHTML = state.feed.map(item => `
         <li class="feed-item">
           <span class="feed-item-text">${item.text}</span>
@@ -1281,81 +974,79 @@ const firebaseConfig = {
       `).join("");
     }
 
-    // Premium visual event handler when sold
     function showSoldOverlay(player) {
       const overlay = $("resultOverlay");
-
-      // Wipe prior confetti nodes
       overlay.querySelector(".confetti-wrap")?.remove();
-
-      // Spawn custom canvas styled confetti bits
       const confetti = document.createElement("div");
       confetti.className = "confetti-wrap";
-      confetti.innerHTML = Array.from({ length: 60 }, (_, i) =>
-        `<span style="--i:${i}; --delay:${(i % 10) * 0.045}s; --x:${(i % 2 ? 1 : -1) * (30 + (i % 7) * 20)}px; --rot:${(i * 47) % 360}deg;"></span>`
-      ).join("");
+      confetti.innerHTML = Array.from({ length: 60 }, (_, i) => `<span style="--i:${i}; --delay:${(i % 10) * 0.045}s; --x:${(i % 2 ? 1 : -1) * (30 + (i % 7) * 20)}px; --rot:${(i * 47) % 360}deg;"></span>`).join("");
 
       $("oName").textContent = (player.isIconPlayer ? '⭐ ' : '') + (player.isChitPlayer ? '🎟️ ' : '') + (player.name || "Player");
       $("oMeta").innerHTML = `<span style="font-weight:700;color:var(--text-muted);">${player.soldToTeamName || "Team"}</span> <br> <b style="font-size:24px;margin-top:8px;display:inline-block;font-weight:800;color:var(--accent-gold);">${money(player.soldPrice)}</b>`;
 
       overlay.querySelector('.overlay-card').prepend(confetti);
       overlay.classList.add("show");
-
       setTimeout(() => overlay.classList.remove("show"), 3200);
       setTimeout(() => confetti.remove(), 3600);
     }
 
-    // Visual event handler when unsold
     function showUnsoldOverlay(player) {
       const overlay = $("unsoldOverlay");
       $("uName").textContent = player.name || "Player";
-
       overlay.classList.add("show");
-      
-      // Hide after a brief moment
       setTimeout(() => overlay.classList.remove("show"), 3000);
     }
 
-    // Changes detector on snapshots
     function detectPlayerChanges(players) {
+      const isAuctionEnded = state.settings?.auctionEnded || state.settings?.status === "Ended";
+
       players.forEach(player => {
         const oldStatus = state.prevStatusMap.get(player.id);
         const newStatus = player.status || "Pending";
 
-        if (newStatus === "Sold" && oldStatus !== "Sold") {
-          pushFeed(`✅ ${player.isChitPlayer ? '🎟️ ' : ''}${player.name} sold to ${player.soldToTeamName} for ${money(player.soldPrice)}`);
-          showSoldOverlay(player);
-        }
-
-        if (newStatus === "Unsold" && oldStatus !== "Unsold") {
-          pushFeed(`❌ ${player.name} marked unsold`);
-          showUnsoldOverlay(player);
+        if (oldStatus) {
+            if (newStatus === "Sold" && oldStatus !== "Sold") {
+              pushFeed(`✅ ${player.isChitPlayer ? '🎟️ ' : ''}${player.name} sold to ${player.soldToTeamName} for ${money(player.soldPrice)}`);
+              
+              if (!isAuctionEnded && !player.isIconPlayer && !state.isFirstPlayersLoad) {
+                  showSoldOverlay(player);
+              }
+            }
+            if (newStatus === "Unsold" && oldStatus !== "Unsold") {
+              pushFeed(`❌ ${player.name} marked unsold`);
+              
+              if (!isAuctionEnded && !player.isIconPlayer && !state.isFirstPlayersLoad) {
+                  showUnsoldOverlay(player);
+              }
+            }
         }
       });
-
       state.prevStatusMap = new Map(players.map(p => [p.id, p.status || "Pending"]));
     }
 
-    // Batch renderer
     function renderAll() {
-      renderSummary();
+      renderSummary(); 
       renderCurrentPlayer();
       renderTeams();
       renderPlayers();
       renderFeed();
     }
 
-    // Navigation swiping handlers
-    const screenOrder = ["screenLive", "screenTeams", "screenPlayers"];
-    let activeScreenIndex = 0;
-
     function switchScreen(id) {
+      if(!screenOrder.includes(id)) return;
       const nextIndex = screenOrder.indexOf(id);
-      if (nextIndex === -1 || nextIndex === activeScreenIndex) return;
 
-      document.querySelectorAll(".screen").forEach((screen, index) => {
+      document.querySelectorAll(".screen").forEach(screen => {
+        if(!screenOrder.includes(screen.id)) {
+            screen.classList.remove("active", "left", "right");
+            screen.style.display = "none";
+            return;
+        } else {
+            screen.style.display = "flex";
+        }
+        
+        const index = screenOrder.indexOf(screen.id);
         screen.classList.remove("active", "left", "right");
-
         if (index < nextIndex) screen.classList.add("left");
         if (index > nextIndex) screen.classList.add("right");
       });
@@ -1372,20 +1063,14 @@ const firebaseConfig = {
       activeScreenIndex = nextIndex;
     }
 
-    // Register Click triggers on bottom buttons
+    // Connect Bottom Nav Triggers
     document.querySelectorAll(".tab").forEach(tab => {
       tab.addEventListener("click", () => switchScreen(tab.dataset.screen));
     });
 
-    // ============================================
-    // NEW SWIPE LOGIC ADDED HERE
-    // ============================================
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let touchStartY = 0;
-    let touchEndY = 0;
-    const swipeThreshold = 50; // minimum pixel distance for swipe
-
+    // Mobile swipe mapping
+    let touchStartX = 0, touchEndX = 0, touchStartY = 0, touchEndY = 0;
+    const swipeThreshold = 50; 
     const screenWrap = $("screenWrap");
 
     screenWrap.addEventListener('touchstart', e => {
@@ -1396,27 +1081,19 @@ const firebaseConfig = {
     screenWrap.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
       touchEndY = e.changedTouches[0].screenY;
-      handleSwipe();
-    }, { passive: true });
-
-    function handleSwipe() {
       const diffX = touchStartX - touchEndX;
       const diffY = touchStartY - touchEndY;
 
-      // Ensure it's a horizontal swipe, not vertical scrolling
       if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
         if (diffX > 0 && activeScreenIndex < screenOrder.length - 1) {
-          // Swiped left (next screen)
           switchScreen(screenOrder[activeScreenIndex + 1]);
         } else if (diffX < 0 && activeScreenIndex > 0) {
-          // Swiped right (previous screen)
           switchScreen(screenOrder[activeScreenIndex - 1]);
         }
       }
-    }
-    // ============================================
+    }, { passive: true });
 
-    // Register directory filters clicks
+    // Directory filter & search maps
     document.querySelectorAll(".filter-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -1425,76 +1102,79 @@ const firebaseConfig = {
         renderPlayers();
       });
     });
-
-    // Setup input queries listener
     $("playerSearch").addEventListener("input", (e) => {
       state.searchQuery = e.target.value;
       renderPlayers();
     });
 
-    // Setup Modals Triggers
+    // Modals Handling
     $("infoBtn").addEventListener("click", () => $("infoModal").classList.add("show"));
     $("closeInfoBtn").addEventListener("click", () => $("infoModal").classList.remove("show"));
     $("infoModal").addEventListener("click", (e) => { if (e.target === $("infoModal")) $("infoModal").classList.remove("show"); });
-    
     $("closeOverviewBtn").addEventListener("click", () => $("playerOverviewModal").classList.remove("show"));
     $("playerOverviewModal").addEventListener("click", (e) => { if (e.target === $("playerOverviewModal")) $("playerOverviewModal").classList.remove("show"); });
 
-    // Subscriptions setup
-    onSnapshot(SETTINGS_REF, snap => {
-      state.settings = snap.exists() ? snap.data() : null;
+    // ============================================
+    // Realtime Hook Inits
+    // ============================================
+    function initRealtimeListeners() {
+      unsubSettings = onSnapshot(SETTINGS_REF, snap => {
+        state.settings = snap.exists() ? snap.data() : null;
+        const liveId = state.settings?.livePlayerId || "";
+        if (liveId && liveId !== state.prevLiveId) {
+          const player = state.players.find(p => p.id === liveId);
+          if (player) pushFeed(`🎯 On the Block: ${player.name}`);
+        }
+        state.prevLiveId = liveId;
+        renderAll();
+      });
 
-      const liveId = state.settings?.livePlayerId || "";
-      if (liveId && liveId !== state.prevLiveId) {
-        const player = state.players.find(p => p.id === liveId);
-        if (player) pushFeed(`🎯 On the Block: ${player.name}`);
-      }
+      let isFirstTeamsLoad = true;
+      unsubTeams = onSnapshot(teamsCol, snap => {
+        const newTeams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        if (!isFirstTeamsLoad) {
+          newTeams.forEach(team => {
+            const oldTopUp = state.prevTeamTopUpMap.get(team.id) || 0;
+            const newTopUp = Number(team.topUp) || 0;
+            if (newTopUp > oldTopUp) {
+              const diff = newTopUp - oldTopUp;
+              showToast(`💰 <b>${team.name}</b> received a top-up of <span style="color:var(--accent-gold)">${money(diff)}</span>!`);
+              pushFeed(`💰 ${team.name} purse topped up by ${money(diff)}`);
+            }
+          });
+        }
+        state.prevTeamTopUpMap = new Map(newTeams.map(t => [t.id, Number(t.topUp) || 0]));
+        isFirstTeamsLoad = false;
+        state.teams = newTeams;
+        renderAll();
+      });
 
-      state.prevLiveId = liveId;
-      renderAll();
-    });
+      unsubPlayers = onSnapshot(playersCol, snap => {
+        const players = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        if (!state.isFirstPlayersLoad) {
+            detectPlayerChanges(players);
+        } else {
+            state.prevStatusMap = new Map(players.map(p => [p.id, p.status || "Pending"]));
+            state.isFirstPlayersLoad = false;
+        }
 
-    let isFirstTeamsLoad = true;
-    onSnapshot(teamsCol, snap => {
-      const newTeams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-      if (!isFirstTeamsLoad) {
-        newTeams.forEach(team => {
-          const oldTopUp = state.prevTeamTopUpMap.get(team.id) || 0;
-          const newTopUp = Number(team.topUp) || 0;
-          
-          if (newTopUp > oldTopUp) {
-            const diff = newTopUp - oldTopUp;
-            showToast(`💰 <b>${team.name}</b> received a top-up of <span style="color:var(--accent-gold)">${money(diff)}</span>!`);
-            pushFeed(`💰 ${team.name} purse topped up by ${money(diff)}`);
-          }
-        });
-      }
-
-      state.prevTeamTopUpMap = new Map(newTeams.map(t => [t.id, Number(t.topUp) || 0]));
-      isFirstTeamsLoad = false;
-      
-      state.teams = newTeams;
-      renderAll();
-    });
-
-    onSnapshot(playersCol, snap => {
-      const players = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      detectPlayerChanges(players);
-      state.players = players;
-      renderAll();
-    });
+        state.players = players;
+        renderAll();
+      });
+    }
 
   </script>
 
-  <!-- Start App Initialization -->
   <script>
-    window.startApp = () => {
+    window.enterLobby = () => {
       const splash = document.getElementById('splashScreen');
       if (splash) {
         splash.style.opacity = '0';
         setTimeout(() => {
           splash.remove();
+          document.getElementById('lobbyView').style.display = 'flex';
+          loadLobby();
         }, 700);
       }
     };
