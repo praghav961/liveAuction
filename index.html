@@ -332,7 +332,7 @@
           </p>
       </div>
 
-      <button onclick="enterLobby()" class="group relative inline-flex items-center justify-center px-12 py-4 font-bold text-black uppercase tracking-[0.2em] text-sm bg-gradient-to-r from-[var(--accent-gold)] to-yellow-400 rounded-full overflow-hidden shadow-[0_0_20px_rgba(251,191,36,0.25)] transition-all hover:scale-105 hover:shadow-[0_0_35px_rgba(251,191,36,0.4)] opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards]">
+      <button id="enterViewerBtn" class="group relative inline-flex items-center justify-center px-12 py-4 font-bold text-black uppercase tracking-[0.2em] text-sm bg-gradient-to-r from-[var(--accent-gold)] to-yellow-400 rounded-full overflow-hidden shadow-[0_0_20px_rgba(251,191,36,0.25)] transition-all hover:scale-105 hover:shadow-[0_0_35px_rgba(251,191,36,0.4)] opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards]">
           <span class="relative z-10">Enter Viewer</span>
           <div class="absolute inset-0 h-full w-full bg-white/30 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
       </button>
@@ -378,6 +378,15 @@
       </div>
       <div class="header-right">
         <span class="live-badge" id="liveBadge">● LIVE</span>
+        <button id="shareBtn" class="info-btn" aria-label="Share Auction">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
         <button id="infoBtn" class="info-btn" aria-label="Software Information">ℹ️</button>
       </div>
     </header>
@@ -599,86 +608,91 @@
     // LOBBY SETUP
     // ============================================
     window.loadLobby = async () => {
-      const snap = await getDocs(auctionsCol);
       const wrap = $("lobbyList");
-      
-      if (snap.empty) {
-        wrap.innerHTML = `
-          <div class="flex flex-col items-center justify-center py-20 px-4 text-center">
-            <div class="w-20 h-20 mb-6 opacity-30 grayscale">
-              <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify" class="w-full h-full object-contain drop-shadow-md" onerror="this.src='https://placehold.co/200x200/18181b/fbbf24?text=Auctify'" />
+      try {
+        const snap = await getDocs(auctionsCol);
+        
+        if (snap.empty) {
+          wrap.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-20 px-4 text-center">
+              <div class="w-20 h-20 mb-6 opacity-30 grayscale">
+                <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify" class="w-full h-full object-contain drop-shadow-md" onerror="this.src='https://placehold.co/200x200/18181b/fbbf24?text=Auctify'" />
+              </div>
+              <h3 class="text-lg font-bold text-[var(--text-main)] mb-2">No active workspaces</h3>
+              <p class="text-[var(--text-faint)] text-xs font-medium max-w-[250px]">The administrator hasn't created any tournaments yet. Please check back later.</p>
+            </div>`;
+          return;
+        }
+
+        function getStatusPriority(data) {
+          if (data.status === "Live" || data.livePlayerId) return 1;
+          if (data.auctionEnded || data.status === "Ended") return 3;
+          return 2;
+        }
+
+        const auctions = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+
+        auctions.sort((a, b) => {
+          const priorityA = getStatusPriority(a);
+          const priorityB = getStatusPriority(b);
+          if (priorityA !== priorityB) {
+            return priorityA - priorityB;
+          }
+
+          const dateA = a.date ? new Date(a.date).getTime() : 0;
+          const dateB = b.date ? new Date(b.date).getTime() : 0;
+          if (dateA !== dateB) {
+            return dateA - dateB;
+          }
+
+          return (b.createdAt || 0) - (a.createdAt || 0);
+        });
+
+        let html = "";
+        auctions.forEach(data => {
+          let statusText = "Upcoming";
+          let statusClass = "bg-[rgba(96,165,250,0.1)] text-[var(--accent-blue)] border-[rgba(96,165,250,0.2)]"; 
+
+          if (data.auctionEnded || data.status === "Ended") {
+              statusText = "Ended";
+              statusClass = "bg-[rgba(248,113,113,0.1)] text-[var(--accent-red)] border-[rgba(248,113,113,0.2)]"; 
+          } else if (data.status === "Live" || data.livePlayerId) {
+              statusText = "Live";
+              statusClass = "bg-[rgba(52,211,153,0.1)] text-[var(--accent-green)] border-[rgba(52,211,153,0.2)] animate-pulse"; 
+          }
+
+          let formattedDate = 'TBD';
+          if(data.date) formattedDate = new Date(data.date).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+
+          const logoImage = data.tournamentLogoUrl || placeholder(data.tournamentName?.[0] || 'T');
+
+          html += `
+            <div class="bg-[var(--surface)] border border-[var(--border-light)] rounded-2xl p-4 mb-4 flex flex-col gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.2)] active:scale-[0.98] transition-transform cursor-pointer" onclick="joinAuction('${data.id}')">
+               <div class="flex justify-between items-start gap-2">
+                  <div class="flex items-center gap-3 min-w-0">
+                     <img src="${logoImage}" class="w-10 h-10 rounded-lg object-cover bg-[var(--bg)] border border-[var(--border-light)] p-0.5 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=T'"/>
+                     <h3 class="text-base font-extrabold text-white leading-tight line-clamp-2">${data.tournamentName || 'Unnamed Tournament'} ${data.spplMode ? '👑' : ''}</h3>
+                  </div>
+                  <span class="px-2 py-1 rounded-[6px] text-[9px] font-black uppercase tracking-wider border ${statusClass} shrink-0">${statusText}</span>
+               </div>
+               <div class="flex flex-col gap-1 text-[11px] text-[var(--text-muted)] font-semibold bg-[var(--surface-hover)] border border-[var(--border)] p-2.5 rounded-xl mt-1">
+                  <span class="flex items-center gap-1.5"><span class="text-sm">📅</span> ${formattedDate} ${data.time ? '• ' + data.time : ''}</span>
+                  <span class="flex items-center gap-1.5 truncate"><span class="text-sm">📍</span> ${data.venue || 'TBD'}, ${data.city || 'TBD'}</span>
+               </div>
+               <div class="grid grid-cols-4 gap-2 text-center mt-1">
+                  <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Teams</div><div class="text-xs font-bold text-white">${data.numTeams || 0}</div></div>
+                  <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Players</div><div class="text-xs font-bold text-white">${data.numPlayers || 0}</div></div>
+                  <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Base</div><div class="text-[11px] font-bold text-[var(--accent-gold)]">${Number(data.basePrice||0).toLocaleString()}</div></div>
+                  <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Purse</div><div class="text-[11px] font-bold text-[var(--accent-green)]">${Number(data.teamPurse||0).toLocaleString()}</div></div>
+               </div>
             </div>
-            <h3 class="text-lg font-bold text-[var(--text-main)] mb-2">No active workspaces</h3>
-            <p class="text-[var(--text-faint)] text-xs font-medium max-w-[250px]">The administrator hasn't created any tournaments yet. Please check back later.</p>
-          </div>`;
-        return;
+          `;
+        });
+        wrap.innerHTML = html;
+      } catch (err) {
+        console.error("Error loading workspaces:", err);
+        wrap.innerHTML = `<div class="text-center text-[var(--accent-red)] text-xs mt-10">Failed to load workspaces. Please check connection.</div>`;
       }
-
-      function getStatusPriority(data) {
-        if (data.status === "Live" || data.livePlayerId) return 1;
-        if (data.auctionEnded || data.status === "Ended") return 3;
-        return 2;
-      }
-
-      const auctions = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-
-      auctions.sort((a, b) => {
-        const priorityA = getStatusPriority(a);
-        const priorityB = getStatusPriority(b);
-        if (priorityA !== priorityB) {
-          return priorityA - priorityB;
-        }
-
-        const dateA = a.date ? new Date(a.date).getTime() : 0;
-        const dateB = b.date ? new Date(b.date).getTime() : 0;
-        if (dateA !== dateB) {
-          return dateA - dateB;
-        }
-
-        return (b.createdAt || 0) - (a.createdAt || 0);
-      });
-
-      let html = "";
-      auctions.forEach(data => {
-        let statusText = "Upcoming";
-        let statusClass = "bg-[rgba(96,165,250,0.1)] text-[var(--accent-blue)] border-[rgba(96,165,250,0.2)]"; 
-
-        if (data.auctionEnded || data.status === "Ended") {
-            statusText = "Ended";
-            statusClass = "bg-[rgba(248,113,113,0.1)] text-[var(--accent-red)] border-[rgba(248,113,113,0.2)]"; 
-        } else if (data.status === "Live" || data.livePlayerId) {
-            statusText = "Live";
-            statusClass = "bg-[rgba(52,211,153,0.1)] text-[var(--accent-green)] border-[rgba(52,211,153,0.2)] animate-pulse"; 
-        }
-
-        let formattedDate = 'TBD';
-        if(data.date) formattedDate = new Date(data.date).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-
-        const logoImage = data.tournamentLogoUrl || placeholder(data.tournamentName?.[0] || 'T');
-
-        html += `
-          <div class="bg-[var(--surface)] border border-[var(--border-light)] rounded-2xl p-4 mb-4 flex flex-col gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.2)] active:scale-[0.98] transition-transform cursor-pointer" onclick="joinAuction('${data.id}')">
-             <div class="flex justify-between items-start gap-2">
-                <div class="flex items-center gap-3 min-w-0">
-                   <img src="${logoImage}" class="w-10 h-10 rounded-lg object-cover bg-[var(--bg)] border border-[var(--border-light)] p-0.5 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=T'"/>
-                   <h3 class="text-base font-extrabold text-white leading-tight line-clamp-2">${data.tournamentName || 'Unnamed Tournament'} ${data.spplMode ? '👑' : ''}</h3>
-                </div>
-                <span class="px-2 py-1 rounded-[6px] text-[9px] font-black uppercase tracking-wider border ${statusClass} shrink-0">${statusText}</span>
-             </div>
-             <div class="flex flex-col gap-1 text-[11px] text-[var(--text-muted)] font-semibold bg-[var(--surface-hover)] border border-[var(--border)] p-2.5 rounded-xl mt-1">
-                <span class="flex items-center gap-1.5"><span class="text-sm">📅</span> ${formattedDate} ${data.time ? '• ' + data.time : ''}</span>
-                <span class="flex items-center gap-1.5 truncate"><span class="text-sm">📍</span> ${data.venue || 'TBD'}, ${data.city || 'TBD'}</span>
-             </div>
-             <div class="grid grid-cols-4 gap-2 text-center mt-1">
-                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Teams</div><div class="text-xs font-bold text-white">${data.numTeams || 0}</div></div>
-                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Players</div><div class="text-xs font-bold text-white">${data.numPlayers || 0}</div></div>
-                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Base</div><div class="text-[11px] font-bold text-[var(--accent-gold)]">${Number(data.basePrice||0).toLocaleString()}</div></div>
-                <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Purse</div><div class="text-[11px] font-bold text-[var(--accent-green)]">${Number(data.teamPurse||0).toLocaleString()}</div></div>
-             </div>
-          </div>
-        `;
-      });
-      wrap.innerHTML = html;
     };
 
     window.joinAuction = (id) => {
@@ -690,6 +704,7 @@
        teamsCol = collection(db, "auctions", id, "teams");
        playersCol = collection(db, "auctions", id, "players");
 
+       switchScreen("screenLive");
        initRealtimeListeners();
     };
 
@@ -707,9 +722,13 @@
        activeScreenIndex = -1;
        document.querySelectorAll(".screen").forEach(s => s.classList.remove("active", "left", "right"));
 
+       const url = new URL(window.location.href);
+       url.searchParams.delete('auction');
+       window.history.replaceState({}, '', url.pathname);
+
        $("appView").style.display = "none";
        $("lobbyView").style.display = "flex";
-       loadLobby();
+       window.loadLobby();
     };
 
     // ============================================
@@ -734,7 +753,7 @@
 
       const slotsFilled = bought.length;
       const slotsLeft = Math.max(0, perTeam - slotsFilled);
-      const purseLeft = Math.max(0, purse - spent);
+      const purseLeft = Math.max(0, purse - (spent + captainSpent));
       
       const reserve = Math.max(0, slotsLeft - 1) * base; 
       const maxBid = slotsLeft > 0 ? Math.max(0, purseLeft - reserve) : 0;
@@ -906,20 +925,16 @@
       wrap.innerHTML = sortedTeams.map(team => {
         const stats = getTeamStats(team);
         
-        // --- Custom Roster Sorting Logic ---
         const sortedBought = [...stats.bought].sort((a, b) => {
-          // 1. Captains always rise to the very top
           if (a.isCaptain && !b.isCaptain) return -1;
           if (!a.isCaptain && b.isCaptain) return 1;
 
-          // 2. Icon / Chit Players sit directly below the Captain
           const aIsSpecial = a.isIconPlayer || a.isChitPlayer;
           const bIsSpecial = b.isIconPlayer || b.isChitPlayer;
           
           if (aIsSpecial && !bIsSpecial) return -1;
           if (!aIsSpecial && bIsSpecial) return 1;
 
-          // 3. All remaining players are sorted by Sold Price (Highest to Lowest)
           const priceA = Number(a.soldPrice) || 0;
           const priceB = Number(b.soldPrice) || 0;
           return priceB - priceA; 
@@ -1188,6 +1203,77 @@
     $("closeOverviewBtn").addEventListener("click", () => $("playerOverviewModal").classList.remove("show"));
     $("playerOverviewModal").addEventListener("click", (e) => { if (e.target === $("playerOverviewModal")) $("playerOverviewModal").classList.remove("show"); });
 
+    // Robust clipboard fallback helper
+    async function copyToClipboard(text) {
+      // 1. Try modern clipboard API if available and secure
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast("🔗 Link copied to clipboard!");
+          return;
+        } catch (err) {
+          console.warn("Clipboard API failed, trying legacy fallback.", err);
+        }
+      }
+      
+      // 2. Legacy fallback for older browsers or non-secure webviews
+      try {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        // Prevent scrolling to bottom
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+          showToast("🔗 Link copied to clipboard!");
+        } else {
+          showToast("Failed to copy link");
+        }
+      } catch (err) {
+        console.error("Legacy copy failed:", err);
+        showToast("Failed to copy link");
+      }
+    }
+
+    // Share Button Handling
+    $("shareBtn").addEventListener("click", async () => {
+      if (!currentAuctionId) {
+        showToast("⚠️ No active auction to share.");
+        return;
+      }
+      
+      const shareUrl = `${window.location.origin}${window.location.pathname}?auction=${currentAuctionId}`;
+      const tName = state.settings?.tournamentName || 'tournament';
+      const shareTitle = `${tName} - Auctify`;
+      const shareData = {
+        title: shareTitle,
+        text: `Watch the live auction for ${tName}!`,
+        url: shareUrl
+      };
+      
+      // Check if native sharing is fully supported for this data
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          // Ignore if the user intentionally dismissed the share sheet
+          if (err.name !== "AbortError") {
+            await copyToClipboard(shareUrl);
+          }
+        }
+      } else {
+        // Native share not supported, fallback to clipboard
+        await copyToClipboard(shareUrl);
+      }
+    });
+
     // ============================================
     // Realtime Hook Inits
     // ============================================
@@ -1238,21 +1324,26 @@
       });
     }
 
-  </script>
-
-  <script>
+    // Splash Screen Transition Handlers
     window.enterLobby = () => {
-      const splash = document.getElementById('splashScreen');
+      const splash = $("splashScreen");
       if (splash) {
         splash.style.opacity = '0';
         setTimeout(() => {
           splash.remove();
-          document.getElementById('lobbyView').style.display = 'flex';
-          loadLobby();
+          const urlParams = new URLSearchParams(window.location.search);
+          const sharedAuctionId = urlParams.get('auction');
+          if (sharedAuctionId) {
+            window.joinAuction(sharedAuctionId);
+          } else {
+            $("lobbyView").style.display = 'flex';
+            window.loadLobby();
+          }
         }, 700);
       }
     };
-  </script>
 
+    $("enterViewerBtn").addEventListener("click", window.enterLobby);
+  </script>
 </body>
 </html>
