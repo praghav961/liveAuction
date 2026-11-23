@@ -141,7 +141,7 @@
     .info-btn:active { transform: scale(0.9); color: var(--text-main); }
 
     /* ============ Stats bar ============ */
-    .stats-bar { flex-shrink: 0; width: 100%; overflow-x: auto; background-color: var(--surface); border-bottom: 1px solid var(--border-light); padding: 8px 12px; display: flex; gap: 8px; }
+    .stats-bar { flex-shrink: 0; width: 100%; overflow-x: auto; touch-action: pan-x; background-color: var(--surface); border-bottom: 1px solid var(--border-light); padding: 8px 12px; display: flex; gap: 8px; }
     .stat-card { min-width: 70px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; border-radius: 12px; background-color: var(--bg); border: 1px solid var(--border-light); }
     .stat-card.stat-narrow { min-width: 60px; }
     .stat-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; font-weight: 700; }
@@ -170,7 +170,7 @@
 
     /* ============ Cards ============ */
     .card { border-radius: 16px; background-color: var(--surface); border: 1px solid var(--border-light); padding: 16px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .card.card-grow { flex: 1; min-height: 180px; overflow: hidden; }
+    .card.card-grow { flex: 1; min-height: 200px; overflow: hidden; }
     .card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); }
     .card-title { font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
     
@@ -195,8 +195,12 @@
     .player-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 4px; }
     .tag { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; color: var(--text-muted); background-color: var(--bg); border: 1px solid var(--border); }
 
+    /* ============ Pinned Team Section ============ */
+    .pinned-section { display: flex; flex-direction: column; gap: 10px; }
+    .pinned-header { font-size: 11px; color: var(--accent-gold); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; padding-left: 4px; }
+
     /* ============ Feed ============ */
-    .feed-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
+    .feed-list { flex: 1; overflow-y: auto; touch-action: pan-y; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
     .empty-state { font-size: 12px; color: var(--text-faint); text-align: center; padding: 24px 0; font-weight: 500; }
     .feed-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; background-color: var(--surface-hover); border: 1px solid var(--border-light); font-size: 12px; animation: fadeIn 0.3s ease; }
     .feed-item-text { color: var(--text-main); font-weight: 500; }
@@ -208,11 +212,22 @@
 
     .teams-dashboard { display: flex; flex-direction: column; gap: 12px; padding-bottom: 24px; }
     .team-card { border-radius: 16px; background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%); border: 1px solid var(--border-light); padding: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .team-card.pinned-card { border-color: var(--accent-gold); box-shadow: 0 4px 20px rgba(251,191,36,0.15); }
     .team-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); }
     .team-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .team-avatar { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 1px solid var(--border); background-color: var(--bg); flex-shrink: 0; padding: 2px;}
-    .team-name { font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1; }
+    .team-name { font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .team-owner { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .team-slots { font-size: 11px; color: var(--text-faint); font-weight: 600; margin-top: 4px; }
+
+    .pin-btn {
+      background: transparent; border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text-muted); cursor: pointer; padding: 6px 10px; font-size: 10px; font-weight: 800; text-transform: uppercase;
+      transition: 0.2s; letter-spacing: 0.5px; flex-shrink: 0;
+    }
+    .pin-btn:active { transform: scale(0.94); }
+    .pin-btn.active { color: #000; background: var(--accent-gold); border-color: var(--accent-gold); }
+
     .team-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; margin-bottom: 12px; }
     .team-stat { background-color: var(--bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-light); }
     .team-stat-label { display: block; font-size: 9px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
@@ -235,26 +250,35 @@
     .search-input::placeholder { color: var(--text-faint); }
     .search-input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(96,165,250,0.1); }
     .search-icon { position: absolute; right: 14px; top: 14px; font-size: 11px; pointer-events: none; }
-    .filter-pills { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0; }
+    .filter-pills { display: flex; gap: 6px; overflow-x: auto; touch-action: pan-x; padding: 2px 0; }
     .filter-btn { flex-shrink: 0; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--bg); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); transition: all 0.2s ease; cursor: pointer; }
     .filter-btn.active { background: var(--surface-hover); border-color: var(--border); color: var(--text-main); }
 
     .players-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 24px; }
-    .player-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 12px; background-color: var(--surface); border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: 0.2s; }
+    .player-card { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-radius: 12px; background-color: var(--surface); border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: 0.2s; }
     .player-card:active { background-color: var(--surface-hover); border-color: var(--border); transform: scale(0.98); }
     .player-card-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;}
     .player-rank { font-size: 11px; font-weight: 700; color: var(--text-faint); width: 18px; text-align: center; flex-shrink: 0; }
     .player-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--bg); background-color: var(--bg); flex-shrink: 0; }
     .player-name-row { font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 4px; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .player-skills { display: flex; align-items: center; gap: 8px; font-size: 10px; color: var(--text-muted); font-weight: 600;}
+    .player-skills { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 10px; color: var(--text-muted); font-weight: 600;}
     .player-card-right { text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; }
     .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
     .status-badge.is-sold { color: var(--accent-green); background-color: var(--accent-green-glow); }
     .status-badge.is-unsold { color: var(--accent-red); background-color: rgba(248,113,113,0.15); }
     .status-badge.is-pending { color: var(--accent-blue); background-color: rgba(96,165,250,0.15); }
-    .player-team-name { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100px; }
+    .player-team-name { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px; }
     .player-sold-price { font-size: 12px; font-weight: 800; display: block; margin-top: 2px; }
     .player-round { font-size: 10px; color: var(--text-faint); font-weight: 600; display: block; margin-top: 4px; }
+
+    /* Bell / Watchlist Pin Button */
+    .bell-btn {
+      background: transparent; border: 1px solid var(--border); border-radius: 8px;
+      width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-faint); transition: all 0.2s; flex-shrink: 0; font-size: 12px;
+    }
+    .bell-btn:active { transform: scale(0.9); }
+    .bell-btn.active { color: var(--accent-gold); background-color: var(--accent-gold-glow); border-color: rgba(251,191,36,0.35); }
 
     /* ============ Bottom navigation ============ */
     .bottom-nav { flex-shrink: 0; display: flex; background-color: var(--surface); border-top: 1px solid var(--border); z-index: 20; }
@@ -265,13 +289,14 @@
     .tab-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
 
     /* ============ Overlay Layouts ============ */
-    .result-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background-color: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease; }
+    .result-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background-color: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease; padding: 16px; }
     .result-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
-    .overlay-card { position: relative; z-index: 1; width: 320px; padding: 32px; text-align: center; border-radius: 24px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 24px 64px rgba(0,0,0,0.5); overflow: hidden; animation: soldWrapPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+    .overlay-card { position: relative; z-index: 1; width: 90%; max-width: 320px; padding: 28px; text-align: center; border-radius: 24px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 24px 64px rgba(0,0,0,0.5); overflow: hidden; animation: soldWrapPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
     @keyframes soldWrapPop { 0% { transform: scale(0.82) rotate(-3deg); } 60% { transform: scale(1.06) rotate(2deg); } 100% { transform: scale(1) rotate(0deg); } }
     .overlay-content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; }
     .overlay-badge { display: inline-flex; padding: 10px 32px; border-radius: 100px; color: var(--accent-green); background-color: var(--accent-green-glow); border: 1px solid rgba(52,211,153,0.3); font-size: 16px; font-weight: 800; letter-spacing: 2px; margin-bottom: 24px; }
     .overlay-name { font-size: 24px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; margin-bottom: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+    .overlay-city { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: -10px; margin-bottom: 16px; }
     .overlay-divider { width: 64px; height: 3px; background: var(--accent-green); margin-bottom: 24px; border-radius: 2px;}
     .overlay-label { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .overlay-meta { font-size: 20px; font-weight: 800; }
@@ -288,15 +313,66 @@
 
     /* Player Detail Overview Modal Style */
     .player-modal-card {
-      width: 420px; padding: 32px; border-radius: 24px; background: var(--surface); border: 1px solid var(--border);
+      width: 92%; max-width: 380px; padding: 24px; border-radius: 24px; background: var(--surface); border: 1px solid var(--border);
       box-shadow: 0 24px 64px rgba(0,0,0,0.6); position: relative; text-align: center;
     }
     .modal-close-btn {
-      position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%;
+      position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border-radius: 50%;
       background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer;
       display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.2s;
     }
-    .modal-close-btn:hover { color: var(--text-main); background: var(--surface-hover); }
+    .modal-close-btn:active { color: var(--text-main); background: var(--surface-hover); transform: scale(0.92); }
+
+    /* Alert Pop-up Style */
+    .alert-card {
+      width: 92%; max-width: 350px; padding: 24px; border-radius: 20px; background: radial-gradient(circle at top, rgba(251,191,36,0.15), var(--surface) 80%);
+      border: 1px solid var(--accent-gold); box-shadow: 0 0 40px rgba(251,191,36,0.25); text-align: center;
+      transform: scale(0.92) translateY(14px); transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    .result-overlay.show .alert-card { transform: scale(1) translateY(0); }
+    .alert-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 100px;
+      background: var(--accent-gold); color: #000; font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      margin-bottom: 14px; text-transform: uppercase;
+    }
+
+    /* ============ Team Onboarding & Welcome Modals (Mobile-Optimized) ============ */
+    .team-select-card {
+      width: 94%; max-width: 440px; max-height: 82vh; padding: 22px 18px; border-radius: 24px;
+      background: radial-gradient(circle at top, rgba(251,191,36,0.08), var(--surface) 65%);
+      border: 1px solid var(--border-light); box-shadow: 0 24px 64px rgba(0,0,0,0.65);
+      display: flex; flex-direction: column; text-align: center;
+      transform: scale(0.92) translateY(16px); transition: 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    .result-overlay.show .team-select-card { transform: scale(1) translateY(0); }
+
+    .team-select-list {
+      display: grid; grid-template-columns: 1fr; gap: 10px;
+      overflow-y: auto; max-height: 46vh; padding-right: 2px; margin: 14px 0 16px 0; text-align: left;
+      touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    }
+    .team-select-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px;
+      border-radius: 14px; background: var(--bg); border: 1px solid var(--border);
+      cursor: pointer; transition: all 0.2s ease;
+    }
+    .team-select-item:active {
+      border-color: var(--accent-gold); background: var(--surface-hover);
+      transform: scale(0.98);
+    }
+    .team-select-logo {
+      width: 42px; height: 42px; border-radius: 12px; object-fit: cover;
+      background: var(--surface); border: 1px solid var(--border); padding: 2px; flex-shrink: 0;
+    }
+
+    .welcome-card {
+      width: 92%; max-width: 360px; padding: 28px 22px; border-radius: 24px;
+      background: radial-gradient(circle at top, rgba(251,191,36,0.16), var(--surface) 75%);
+      border: 1px solid rgba(251,191,36,0.45); box-shadow: 0 24px 64px rgba(0,0,0,0.65), 0 0 40px rgba(251,191,36,0.15);
+      text-align: center;
+      transform: scale(0.92) translateY(16px); transition: 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+    .result-overlay.show .welcome-card { transform: scale(1) translateY(0); }
 
     /* ============ Toast Notification ============ */
     .toast-msg {
@@ -306,6 +382,29 @@
       box-shadow: 0 8px 24px rgba(251,191,36,0.25);
       animation: slideDownFade 0.3s ease-out, fadeOutUp 0.3s ease-in 3.7s forwards;
       pointer-events: auto;
+    }
+    .toast-purchase {
+      background: linear-gradient(180deg, #1f1f24 0%, #141418 100%);
+      border: 1px solid var(--accent-green);
+      color: var(--text-main); padding: 12px 14px; border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.55), 0 0 24px rgba(52,211,153,0.2);
+      animation: slideDownFade 0.3s ease-out, fadeOutUp 0.35s ease-in 6.15s forwards;
+      pointer-events: auto; text-align: left;
+    }
+    .toast-purchase-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px;
+    }
+    .toast-purchase-stat {
+      background: var(--bg); border: 1px solid var(--border-light);
+      border-radius: 10px; padding: 7px 4px; text-align: center; min-width: 0;
+    }
+    .toast-purchase-label {
+      display: block; font-size: 8.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.4px; color: var(--text-faint); margin-bottom: 3px;
+    }
+    .toast-purchase-val {
+      display: block; font-size: 11px; font-weight: 800; color: var(--text-main);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     @keyframes slideDownFade { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @keyframes fadeOutUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
@@ -320,7 +419,7 @@
       
       <div class="relative mb-10">
           <div class="absolute inset-0 bg-[var(--accent-gold)] blur-[80px] opacity-15 rounded-full scale-150"></div>
-          <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify Logo" class="relative w-32 h-32 sm:w-40 sm:h-40 object-contain rounded-3xl shadow-[0_0_50px_rgba(251,191,36,0.1)] transform transition-all hover:scale-105 duration-700" onerror="this.src='https://placehold.co/200x200/18181b/fbbf24?text=Auctify'" />
+          <img src="logo.PNG" alt="Auctify Logo" class="relative w-32 h-32 sm:w-40 sm:h-40 object-contain rounded-3xl shadow-[0_0_50px_rgba(251,191,36,0.1)] transform transition-all hover:scale-105 duration-700" onerror="this.src='https://placehold.co/200x200/18181b/fbbf24?text=Auctify'" />
       </div>
       
       <div class="text-center space-y-5 mb-14">
@@ -344,7 +443,7 @@
     </div>
   </div>
 
-  <div id="toastContainer" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; width: 90%; max-width: 400px;"></div>
+  <div id="toastContainer" style="position: fixed; top: calc(env(safe-area-inset-top, 0px) + 14px); left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; width: 92%; max-width: 420px;"></div>
 
   <!-- ================= LOBBY VIEW ================= -->
   <div id="lobbyView" class="app-shell" style="display: none;">
@@ -437,6 +536,9 @@
           </div>
         </div>
 
+        <!-- Pinned Team View -->
+        <div id="pinnedTeamContainer"></div>
+
         <div class="card card-grow">
           <div class="card-header">
             <h2 class="card-title">📝 Real-Time Logs</h2>
@@ -465,7 +567,7 @@
             <span class="count-badge" id="playerTableBadge">0</span>
           </div>
           <div class="search-wrap">
-            <input type="text" id="playerSearch" placeholder="Search by player name..." class="search-input">
+            <input type="text" id="playerSearch" placeholder="Search by player name or city..." class="search-input">
             <span class="search-icon">🔍</span>
           </div>
           <div class="filter-pills no-scrollbar">
@@ -473,6 +575,7 @@
             <button class="filter-btn" data-status="Sold">Sold</button>
             <button class="filter-btn" data-status="Unsold">Unsold</button>
             <button class="filter-btn" data-status="Pending">Pending</button>
+            <button class="filter-btn" data-status="Pinned">Pinned</button>
           </div>
         </div>
         <div id="playersList" class="players-list">
@@ -503,6 +606,7 @@
       <div class="overlay-content">
         <div class="overlay-badge" id="soldBadge">SOLD!</div>
         <h2 id="oName" class="overlay-name">Player Name</h2>
+        <p id="oCity" class="overlay-city" style="display: none;"></p>
         <div class="overlay-divider" id="soldDivider"></div>
         <p class="overlay-label">Bought By</p>
         <p id="oMeta" class="overlay-meta">Team • 0 PTS</p>
@@ -516,6 +620,7 @@
       <div class="overlay-content">
         <div class="overlay-badge overlay-badge-unsold">UNSOLD</div>
         <h2 id="uName" class="overlay-name">Player Name</h2>
+        <p id="uCity" class="overlay-city" style="display: none;"></p>
         <div class="overlay-divider overlay-divider-unsold"></div>
         <p class="overlay-label" style="color: var(--text-faint); font-size: 14px;">No bids received</p>
       </div>
@@ -527,6 +632,40 @@
     <div class="player-modal-card">
       <button class="modal-close-btn" id="closeOverviewBtn">✕</button>
       <div id="overviewContent"></div>
+    </div>
+  </div>
+
+  <!-- LIVE PLAYER ALERT POP-UP (5 SECONDS) -->
+  <div id="liveAlertModal" class="result-overlay">
+    <div class="alert-card">
+      <div class="alert-badge">🔔 WATCHLIST ALERT</div>
+      <h2 id="alertPlayerName" style="font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--text-main);">Player Name</h2>
+      <p id="alertPlayerCity" style="display: none; font-size: 11px; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.8px; margin-top: -2px; margin-bottom: 8px;"></p>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 18px;">is now active on the <b>Live Auction Block!</b></p>
+      <button id="closeAlertBtn" style="width: 100%; padding: 12px; background: var(--accent-gold); color: #000; font-weight: 800; border-radius: 10px; cursor: pointer;">Got It</button>
+    </div>
+  </div>
+
+  <!-- SELECT YOUR TEAM MODAL (FIRST ENTRY ON UPCOMING / LIVE) -->
+  <div id="teamSelectModal" class="result-overlay">
+    <div class="team-select-card">
+      <div class="alert-badge" style="margin: 0 auto 10px auto;">🏆 SELECT YOUR TEAM</div>
+      <h2 style="font-size: 19px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">Which team are you representing?</h2>
+      <p style="font-size: 11px; color: var(--text-muted); line-height: 1.45;">Your team will be pinned automatically with real-time purse, max bid & squad alerts whenever you win a player.</p>
+      <div id="teamSelectList" class="team-select-list no-scrollbar"></div>
+      <button id="skipTeamSelectBtn" style="width: 100%; padding: 11px; background: var(--surface-hover); color: var(--text-muted); border: 1px solid var(--border); border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;">Continue as Spectator</button>
+    </div>
+  </div>
+
+  <!-- WELCOME OWNER MODAL -->
+  <div id="welcomeOwnerModal" class="result-overlay">
+    <div class="welcome-card">
+      <div class="alert-badge" style="margin-bottom: 14px;">👑 OWNER VERIFIED</div>
+      <img id="welcomeTeamLogo" src="" alt="Team Logo" style="width: 68px; height: 68px; border-radius: 16px; object-fit: cover; margin: 0 auto 14px auto; background: var(--bg); border: 2px solid var(--accent-gold); padding: 3px; box-shadow: 0 0 24px rgba(251,191,36,0.25);">
+      <h2 id="welcomeOwnerTitle" style="font-size: 21px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; letter-spacing: -0.4px;">Welcome!</h2>
+      <p id="welcomeTeamName" style="font-size: 13px; font-weight: 700; color: var(--accent-gold); margin-bottom: 10px;"></p>
+      <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">Your team dashboard is now pinned automatically and live purchase notifications are active.</p>
+      <button id="closeWelcomeBtn" style="width: 100%; padding: 12px; background: var(--accent-gold); color: #000; font-weight: 800; border-radius: 12px; cursor: pointer; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">Enter Auction</button>
     </div>
   </div>
 
@@ -568,6 +707,11 @@
     let playersCol = null;
     
     let unsubSettings, unsubTeams, unsubPlayers;
+    let liveAlertTimeout = null;
+    let welcomeTimeout = null;
+    let soldHideTimer = null;
+    let soldConfettiTimer = null;
+    let unsoldHideTimer = null;
     
     // Core State Map
     const state = {
@@ -580,6 +724,10 @@
       prevTeamTopUpMap: new Map(),
       activeFilter: "All",
       searchQuery: "",
+      subscribedPlayerIds: new Set(),
+      pinnedTeamId: null,
+      selectedTeamId: null,
+      onboardingChecked: false,
       isFirstPlayersLoad: true 
     };
 
@@ -587,6 +735,12 @@
     let activeScreenIndex = -1;
 
     const $ = id => document.getElementById(id);
+
+    function escapeHtml(str = "") {
+      return String(str).replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+      }[ch]));
+    }
     
     function money(val) { return Number(val || 0).toLocaleString("en-IN") + " PTS"; }
     function rupees(val) { return "₹ " + Number(val || 0).toLocaleString("en-IN"); }
@@ -602,6 +756,141 @@
       toast.innerHTML = message;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 4000);
+    }
+
+    function showTeamPurchaseNotification(team, player, stats) {
+      const container = $("toastContainer");
+      if (!container) return;
+
+      const totalSlots = state.settings?.playersPerTeam || 0;
+      const cityStr = String(player.city || "").trim();
+      const toast = document.createElement("div");
+      toast.className = "toast-purchase";
+      toast.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+          <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+            <img src="${team.logoUrl || placeholder(team.name?.[0])}" style="width:30px; height:30px; border-radius:8px; object-fit:cover; border:1px solid var(--border); background:var(--bg); flex-shrink:0;">
+            <div style="min-width:0;">
+              <div style="font-size:9.5px; font-weight:800; color:var(--accent-green); text-transform:uppercase; letter-spacing:0.6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">🎉 Player Acquired • ${escapeHtml(team.name)}</div>
+              <div style="font-size:12.5px; font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                ${player.isCaptain ? "👑 " : ""}${escapeHtml(player.name)} <span style="color:${player.isCaptain ? "var(--accent-blue)" : "var(--accent-gold)"}; font-size:11.5px;">(${formatPrice(player.soldPrice, player.isCaptain)})</span>
+              </div>
+              ${cityStr ? `<div style="font-size:10px; font-weight:600; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📍 ${escapeHtml(cityStr)}</div>` : ''}
+            </div>
+          </div>
+          <button style="background:transparent; color:var(--text-faint); font-size:13px; cursor:pointer; padding:2px 4px; flex-shrink:0;" aria-label="Dismiss">✕</button>
+        </div>
+        <div class="toast-purchase-stats">
+          <div class="toast-purchase-stat">
+            <span class="toast-purchase-label">Purse Balance</span>
+            <span class="toast-purchase-val" style="color:var(--accent-green);">${money(stats.purseLeft)}</span>
+          </div>
+          <div class="toast-purchase-stat">
+            <span class="toast-purchase-label">Max Bid</span>
+            <span class="toast-purchase-val" style="color:var(--accent-gold);">${money(stats.maxBid)}</span>
+          </div>
+          <div class="toast-purchase-stat">
+            <span class="toast-purchase-label">Players</span>
+            <span class="toast-purchase-val" style="color:var(--accent-blue);">${stats.slotsFilled} / ${totalSlots}</span>
+          </div>
+        </div>
+      `;
+
+      const timer = setTimeout(() => toast.remove(), 6500);
+      toast.querySelector("button").addEventListener("click", () => {
+        clearTimeout(timer);
+        toast.remove();
+      });
+
+      container.appendChild(toast);
+    }
+
+    // ============================================
+    // TEAM ONBOARDING & OWNER WELCOME
+    // ============================================
+    function openTeamSelectModal() {
+      const list = $("teamSelectList");
+      const sorted = [...state.teams].sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }));
+
+      list.innerHTML = sorted.map(team => `
+        <div class="team-select-item" data-select-team-id="${team.id}">
+          <img class="team-select-logo" src="${team.logoUrl || placeholder(team.name?.[0])}" alt="${escapeHtml(team.name)}">
+          <div style="min-width:0; flex:1;">
+            <div style="font-size:14px; font-weight:800; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(team.name)}</div>
+            ${team.ownerName ? `<div style="font-size:11.5px; font-weight:600; color:var(--text-muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">👤 ${escapeHtml(team.ownerName)}</div>` : `<div style="font-size:11px; font-weight:600; color:var(--text-faint); margin-top:2px;">Tap to select team</div>`}
+          </div>
+          <span style="font-size:11px; font-weight:800; color:var(--accent-gold); flex-shrink:0;">Select →</span>
+        </div>
+      `).join("");
+
+      list.querySelectorAll(".team-select-item").forEach(item => {
+        item.addEventListener("click", () => selectUserTeam(item.dataset.selectTeamId));
+      });
+
+      $("teamSelectModal").classList.add("show");
+    }
+
+    function showWelcomeOwnerModal(team) {
+      const ownerDisplay = (team.ownerName || "").trim();
+      $("welcomeTeamLogo").src = team.logoUrl || placeholder(team.name?.[0]);
+      $("welcomeOwnerTitle").textContent = ownerDisplay ? `Welcome, ${ownerDisplay}!` : `Welcome, ${team.name} Owner!`;
+      $("welcomeTeamName").textContent = `🏆 ${team.name}`;
+      $("welcomeOwnerModal").classList.add("show");
+
+      if (welcomeTimeout) clearTimeout(welcomeTimeout);
+      welcomeTimeout = setTimeout(() => {
+        $("welcomeOwnerModal").classList.remove("show");
+      }, 4000);
+    }
+
+    function selectUserTeam(teamId) {
+      const team = state.teams.find(t => t.id === teamId);
+      if (!team) return;
+
+      if (currentAuctionId) {
+        localStorage.setItem(`auctify_viewer_team_${currentAuctionId}`, team.id);
+      }
+
+      state.selectedTeamId = team.id;
+      state.pinnedTeamId = team.id;
+      $("teamSelectModal").classList.remove("show");
+      renderTeams();
+      showWelcomeOwnerModal(team);
+    }
+
+    function skipTeamSelection() {
+      if (currentAuctionId) {
+        localStorage.setItem(`auctify_viewer_team_${currentAuctionId}`, "__spectator__");
+      }
+      $("teamSelectModal").classList.remove("show");
+    }
+
+    function checkTeamOnboarding() {
+      if (state.onboardingChecked) return;
+      if (!state.settings || !state.teams.length) return;
+
+      state.onboardingChecked = true;
+
+      const isAuctionEnded = state.settings.auctionEnded || state.settings.status === "Ended";
+      const storageKey = `auctify_viewer_team_${currentAuctionId}`;
+      const savedTeamId = localStorage.getItem(storageKey);
+
+      if (savedTeamId) {
+        if (savedTeamId !== "__spectator__") {
+          const existingTeam = state.teams.find(t => t.id === savedTeamId);
+          if (existingTeam) {
+            state.selectedTeamId = existingTeam.id;
+            state.pinnedTeamId = existingTeam.id;
+            renderTeams();
+          }
+        }
+        return;
+      }
+
+      // First time entering this tournament while in Upcoming or Live mode
+      if (!isAuctionEnded) {
+        openTeamSelectModal();
+      }
     }
 
     // ============================================
@@ -671,13 +960,13 @@
                <div class="flex justify-between items-start gap-2">
                   <div class="flex items-center gap-3 min-w-0">
                      <img src="${logoImage}" class="w-10 h-10 rounded-lg object-cover bg-[var(--bg)] border border-[var(--border-light)] p-0.5 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=T'"/>
-                     <h3 class="text-base font-extrabold text-white leading-tight line-clamp-2">${data.tournamentName || 'Unnamed Tournament'} ${data.spplMode ? '👑' : ''}</h3>
+                     <h3 class="text-base font-extrabold text-white leading-tight line-clamp-2">${escapeHtml(data.tournamentName || 'Unnamed Tournament')} ${data.spplMode ? '👑' : ''}</h3>
                   </div>
                   <span class="px-2 py-1 rounded-[6px] text-[9px] font-black uppercase tracking-wider border ${statusClass} shrink-0">${statusText}</span>
                </div>
                <div class="flex flex-col gap-1 text-[11px] text-[var(--text-muted)] font-semibold bg-[var(--surface-hover)] border border-[var(--border)] p-2.5 rounded-xl mt-1">
-                  <span class="flex items-center gap-1.5"><span class="text-sm">📅</span> ${formattedDate} ${data.time ? '• ' + data.time : ''}</span>
-                  <span class="flex items-center gap-1.5 truncate"><span class="text-sm">📍</span> ${data.venue || 'TBD'}, ${data.city || 'TBD'}</span>
+                  <span class="flex items-center gap-1.5"><span class="text-sm">📅</span> ${formattedDate} ${data.time ? '• ' + escapeHtml(data.time) : ''}</span>
+                  <span class="flex items-center gap-1.5 truncate"><span class="text-sm">📍</span> ${escapeHtml(data.venue || 'TBD')}, ${escapeHtml(data.city || 'TBD')}</span>
                </div>
                <div class="grid grid-cols-4 gap-2 text-center mt-1">
                   <div class="bg-[var(--bg)] rounded-lg p-1.5 border border-[var(--border-light)]"><div class="text-[9px] text-[var(--text-faint)] font-bold uppercase">Teams</div><div class="text-xs font-bold text-white">${data.numTeams || 0}</div></div>
@@ -704,6 +993,11 @@
        teamsCol = collection(db, "auctions", id, "teams");
        playersCol = collection(db, "auctions", id, "players");
 
+       state.pinnedTeamId = null;
+       state.selectedTeamId = null;
+       state.onboardingChecked = false;
+       state.subscribedPlayerIds.clear();
+
        switchScreen("screenLive");
        initRealtimeListeners();
     };
@@ -712,12 +1006,29 @@
        if (unsubSettings) unsubSettings();
        if (unsubTeams) unsubTeams();
        if (unsubPlayers) unsubPlayers();
+       if (liveAlertTimeout) clearTimeout(liveAlertTimeout);
+       if (welcomeTimeout) clearTimeout(welcomeTimeout);
+       if (soldHideTimer) clearTimeout(soldHideTimer);
+       if (soldConfettiTimer) clearTimeout(soldConfettiTimer);
+       if (unsoldHideTimer) clearTimeout(unsoldHideTimer);
+
+       $("teamSelectModal").classList.remove("show");
+       $("welcomeOwnerModal").classList.remove("show");
+       $("liveAlertModal").classList.remove("show");
+       $("playerOverviewModal").classList.remove("show");
+       $("resultOverlay").classList.remove("show");
+       $("unsoldOverlay").classList.remove("show");
        
        state.settings = null;
        state.teams = [];
        state.players = [];
        state.feed = [];
+       state.pinnedTeamId = null;
+       state.selectedTeamId = null;
+       state.onboardingChecked = false;
+       state.subscribedPlayerIds.clear();
        state.prevStatusMap.clear();
+       state.prevTeamTopUpMap.clear();
        state.isFirstPlayersLoad = true;
        activeScreenIndex = -1;
        document.querySelectorAll(".screen").forEach(s => s.classList.remove("active", "left", "right"));
@@ -742,6 +1053,7 @@
       const captainsBought = bought.filter(p => p.isCaptain);
       const regularsBought = bought.filter(p => !p.isCaptain);
       
+      // SPPL Logic: Captains use unlimited Rupees, so they DO NOT deduct from the standard points purse
       const spent = regularsBought.reduce((sum, p) => sum + Number(p.soldPrice || 0), 0);
       const captainSpent = captainsBought.reduce((sum, p) => sum + Number(p.soldPrice || 0), 0);
       
@@ -753,7 +1065,7 @@
 
       const slotsFilled = bought.length;
       const slotsLeft = Math.max(0, perTeam - slotsFilled);
-      const purseLeft = Math.max(0, purse - (spent + captainSpent));
+      const purseLeft = Math.max(0, purse - spent);
       
       const reserve = Math.max(0, slotsLeft - 1) * base; 
       const maxBid = slotsLeft > 0 ? Math.max(0, purseLeft - reserve) : 0;
@@ -851,23 +1163,25 @@
       badge.className = reauction ? "status-pill is-reauction" : "status-pill";
 
       const isCaptain = player.isCaptain;
+      const cityStr = String(player.city || "").trim();
 
       wrap.innerHTML = `
         ${isCaptain ? `<div style="position:absolute; top: -10px; font-size:10px; font-weight:800; color:#000; background:var(--accent-blue); padding:4px 12px; border-radius:100px; text-transform:uppercase; letter-spacing:1px; box-shadow:0 4px 12px rgba(96,165,250,0.4); animation: pulseBlue 2s infinite; z-index:20;">👑 CAPTAIN AUCTION</div>` : ''}
         <div class="player-photo-wrap" style="margin-top: ${isCaptain ? '16px' : '0'};">
           <div class="player-photo-glow" style="${isCaptain ? 'background-color: var(--accent-blue);' : ''}"></div>
-          <img class="player-photo" style="${isCaptain ? 'box-shadow: 0 0 0 2px var(--accent-blue);' : ''}" src="${player.imageUrl || placeholder(player.name?.[0])}" alt="${player.name}">
+          <img class="player-photo" style="${isCaptain ? 'box-shadow: 0 0 0 2px var(--accent-blue);' : ''}" src="${player.imageUrl || placeholder(player.name?.[0])}" alt="${escapeHtml(player.name)}">
         </div>
         <div class="player-base-price" style="${isCaptain ? 'color: var(--accent-blue); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.1);' : ''}">💰 Base Price: ${formatPrice(player.isCaptain ? 100 : (player.basePrice || state.settings?.basePrice), isCaptain)}</div>
         <h3 class="player-name-title">
           ${isCaptain ? '<span style="color: var(--accent-blue);">👑</span> ' : ''}
           ${player.isIconPlayer ? '<span style="color: var(--accent-gold);">⭐</span>' : ''}
           ${player.isChitPlayer ? '<span style="color: var(--accent-gold);">🎟️</span>' : ''}
-          ${player.name}
+          ${escapeHtml(player.name)}
         </h3>
         <div class="player-tags">
-          <span class="tag">🏏 Bat: ${player.batting || "-"}</span>
-          <span class="tag">🥎 Bowl: ${player.bowling || "-"}</span>
+          ${cityStr ? `<span class="tag">📍 ${escapeHtml(cityStr)}</span>` : ''}
+          <span class="tag">🏏 Bat: ${escapeHtml(player.batting || "-")}</span>
+          <span class="tag">🥎 Bowl: ${escapeHtml(player.bowling || "-")}</span>
           <span class="tag">${isCaptain ? 'SPPL CAPTAIN' : 'Round ' + (player.auctionRound || state.settings?.currentRound || 1)}</span>
         </div>
       `;
@@ -879,31 +1193,44 @@
       return "status-badge is-pending";
     }
 
+    function toggleNotification(playerId, event) {
+      event.stopPropagation();
+      if (state.subscribedPlayerIds.has(playerId)) {
+        state.subscribedPlayerIds.delete(playerId);
+      } else {
+        state.subscribedPlayerIds.add(playerId);
+      }
+      renderPlayers();
+    }
+
     function openPlayerOverview(playerId) {
       const p = state.players.find(item => item.id === playerId);
       if (!p) return;
 
       const isSold = p.status === "Sold";
+      const cityStr = String(p.city || "").trim();
+
       $("overviewContent").innerHTML = `
         <div style="position:relative; margin-bottom: 16px; display:inline-block;">
-          <img src="${p.imageUrl || placeholder(p.name?.[0])}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); margin: 0 auto; ${p.isCaptain ? 'box-shadow: 0 0 15px rgba(96,165,250,0.5); border-color: var(--accent-blue);' : ''}">
+          <img src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); margin: 0 auto; ${p.isCaptain ? 'box-shadow: 0 0 15px rgba(96,165,250,0.5); border-color: var(--accent-blue);' : ''}">
         </div>
         <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
-          ${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${p.name}
+          ${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${escapeHtml(p.name)}
         </h2>
         <div style="margin-bottom: 16px;"><span class="${statusStyle(p.status)}">${p.status || "Pending"}</span></div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; background: var(--bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); font-size: 11px; margin-bottom: 16px;">
-          <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Batting</span><b>${p.batting || "-"}</b></div>
-          <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Bowling</span><b>${p.bowling || "-"}</b></div>
-          <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Base Price</span><b style="color:${p.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(p.isCaptain ? 100 : (p.basePrice || state.settings?.basePrice), p.isCaptain)}</b></div>
+          <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">City</span><b>${escapeHtml(cityStr || "-")}</b></div>
           <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Auction Round</span><b>${p.isCaptain ? 'SPPL CAPTAIN' : 'Round ' + (p.auctionRound || 1)}</b></div>
+          <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Batting</span><b>${escapeHtml(p.batting || "-")}</b></div>
+          <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Bowling</span><b>${escapeHtml(p.bowling || "-")}</b></div>
+          <div style="grid-column: span 2;"><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Base Price</span><b style="color:${p.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(p.isCaptain ? 100 : (p.basePrice || state.settings?.basePrice), p.isCaptain)}</b></div>
         </div>
 
         ${isSold ? `
           <div style="background: ${p.isCaptain ? 'rgba(96,165,250,0.1)' : 'var(--accent-green-glow)'}; border: 1px solid ${p.isCaptain ? 'rgba(96,165,250,0.3)' : 'rgba(52,211,153,0.3)'}; border-radius: 12px; padding: 12px; text-align: center;">
             <p style="font-size: 10px; text-transform: uppercase; color: ${p.isCaptain ? 'var(--accent-blue)' : 'var(--accent-green)'}; font-weight: 700;">Sold To</p>
-            <h3 style="font-size: 16px; font-weight: 800; color: #fff;">${p.soldToTeamName}</h3>
+            <h3 style="font-size: 16px; font-weight: 800; color: #fff;">${escapeHtml(p.soldToTeamName)}</h3>
             <p style="font-size: 14px; font-weight: 800; color: ${p.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'}; margin-top: 4px;">${formatPrice(p.soldPrice, p.isCaptain)}</p>
           </div>
         ` : ''}
@@ -911,105 +1238,155 @@
       $("playerOverviewModal").classList.add("show");
     }
 
+    function buildTeamCardHtml(team) {
+      const stats = getTeamStats(team);
+      const isPinned = state.pinnedTeamId === team.id;
+
+      const sortedBought = [...stats.bought].sort((a, b) => {
+        if (a.isCaptain && !b.isCaptain) return -1;
+        if (!a.isCaptain && b.isCaptain) return 1;
+
+        const aIsSpecial = a.isIconPlayer || a.isChitPlayer;
+        const bIsSpecial = b.isIconPlayer || b.isChitPlayer;
+        
+        if (aIsSpecial && !bIsSpecial) return -1;
+        if (!aIsSpecial && bIsSpecial) return 1;
+
+        const priceA = Number(a.soldPrice) || 0;
+        const priceB = Number(b.soldPrice) || 0;
+        return priceB - priceA; 
+      });
+
+      const rosterHtml = sortedBought.length
+        ? sortedBought.map(p => {
+            const cityStr = String(p.city || "").trim();
+            return `
+              <div class="roster-item" data-player-id="${p.id}">
+                <div class="roster-player">
+                  <img class="roster-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}">
+                  <div style="min-width: 0;">
+                    <span class="roster-name" style="display: block;">${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${escapeHtml(p.name)}</span>
+                    ${cityStr ? `<span style="display: block; font-size: 10px; color: var(--text-faint); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">📍 ${escapeHtml(cityStr)}</span>` : ''}
+                  </div>
+                </div>
+                <b class="roster-price" style="${p.isCaptain ? 'color: var(--accent-blue);' : 'color: var(--accent-gold);'}">${formatPrice(p.soldPrice, p.isCaptain)}</b>
+              </div>
+            `;
+          }).join("")
+        : `<p class="roster-empty">No players acquired yet.</p>`;
+
+      return `
+        <article class="team-card ${isPinned ? 'pinned-card' : ''}">
+          <div class="team-card-header">
+            <div class="team-info">
+              <img class="team-avatar" src="${team.logoUrl || placeholder(team.name?.[0])}" alt="${escapeHtml(team.name)}">
+              <div style="min-width: 0;">
+                <h3 class="team-name">${escapeHtml(team.name || "Team")}</h3>
+                ${team.ownerName ? `<p class="team-owner">👤 ${escapeHtml(team.ownerName)}</p>` : ''}
+                <p class="team-slots">${stats.slotsFilled}/${state.settings?.playersPerTeam || 0} Slots Filled</p>
+              </div>
+            </div>
+            <button class="pin-btn ${isPinned ? 'active' : ''}" data-team-id="${team.id}">
+              ${isPinned ? '★ Unpin' : '☆ Pin'}
+            </button>
+          </div>
+          <div class="team-stats-grid">
+            <div class="team-stat"><span class="team-stat-label">Purse Left</span><b class="team-stat-value is-purse">${money(stats.purseLeft)}</b></div>
+            <div class="team-stat"><span class="team-stat-label">Max Bid</span><b class="team-stat-value is-maxbid">${money(stats.maxBid)}</b></div>
+            <div class="team-stat"><span class="team-stat-label">Spent</span><b class="team-stat-value">${money(stats.spent)}</b></div>
+            <div class="team-stat"><span class="team-stat-label">Slots Left</span><b class="team-stat-value">${stats.slotsLeft}</b></div>
+          </div>
+          <div class="team-roster"><h4 class="roster-title">Players (${stats.bought.length})</h4>${rosterHtml}</div>
+        </article>
+      `;
+    }
+
     function renderTeams() {
       const wrap = $("teamsDashboard");
+      const pinnedWrap = $("pinnedTeamContainer");
       $("teamCountBadge").textContent = state.teams.length;
 
       if (!state.teams.length) {
         wrap.innerHTML = `<p class="empty-state">No teams found.</p>`;
+        pinnedWrap.innerHTML = "";
         return;
       }
 
-      const sortedTeams = [...state.teams].sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }));
+      const sortedTeams = [...state.teams].sort((a, b) => {
+        if (a.id === state.pinnedTeamId) return -1;
+        if (b.id === state.pinnedTeamId) return 1;
+        return (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" });
+      });
 
-      wrap.innerHTML = sortedTeams.map(team => {
-        const stats = getTeamStats(team);
-        
-        const sortedBought = [...stats.bought].sort((a, b) => {
-          if (a.isCaptain && !b.isCaptain) return -1;
-          if (!a.isCaptain && b.isCaptain) return 1;
+      const pinnedTeam = sortedTeams.find(t => t.id === state.pinnedTeamId);
+      pinnedWrap.innerHTML = pinnedTeam
+        ? `<div class="pinned-section"><div class="pinned-header">⭐ My Team View</div>${buildTeamCardHtml(pinnedTeam)}</div>`
+        : "";
 
-          const aIsSpecial = a.isIconPlayer || a.isChitPlayer;
-          const bIsSpecial = b.isIconPlayer || b.isChitPlayer;
-          
-          if (aIsSpecial && !bIsSpecial) return -1;
-          if (!aIsSpecial && bIsSpecial) return 1;
+      wrap.innerHTML = sortedTeams.map(team => buildTeamCardHtml(team)).join("");
 
-          const priceA = Number(a.soldPrice) || 0;
-          const priceB = Number(b.soldPrice) || 0;
-          return priceB - priceA; 
+      [pinnedWrap, wrap].forEach(container => {
+        container.querySelectorAll('.pin-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tid = btn.dataset.teamId;
+            state.pinnedTeamId = (state.pinnedTeamId === tid) ? null : tid;
+            renderTeams();
+          });
         });
 
-        const rosterHtml = sortedBought.length
-          ? sortedBought.map(p => `
-              <div class="roster-item" data-player-id="${p.id}">
-                <div class="roster-player">
-                  <img class="roster-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${p.name}">
-                  <span class="roster-name">${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${p.name}</span>
-                </div>
-                <b class="roster-price" style="${p.isCaptain ? 'color: var(--accent-blue);' : 'color: var(--accent-gold);'}">${formatPrice(p.soldPrice, p.isCaptain)}</b>
-              </div>
-            `).join("")
-          : `<p class="roster-empty">No players acquired yet.</p>`;
-
-        return `
-          <article class="team-card">
-            <div class="team-card-header">
-              <div class="team-info">
-                <img class="team-avatar" src="${team.logoUrl || placeholder(team.name?.[0])}" alt="${team.name}">
-                <div>
-                  <h3 class="team-name">${team.name || "Team"}</h3>
-                  <p class="team-slots">${stats.slotsFilled}/${state.settings?.playersPerTeam || 0} Slots Filled</p>
-                </div>
-              </div>
-            </div>
-            <div class="team-stats-grid">
-              <div class="team-stat"><span class="team-stat-label">Purse Left</span><b class="team-stat-value is-purse">${money(stats.purseLeft)}</b></div>
-              <div class="team-stat"><span class="team-stat-label">Max Bid</span><b class="team-stat-value is-maxbid">${money(stats.maxBid)}</b></div>
-              <div class="team-stat"><span class="team-stat-label">Spent</span><b class="team-stat-value">${money(stats.spent)}</b></div>
-              <div class="team-stat"><span class="team-stat-label">Slots Left</span><b class="team-stat-value">${stats.slotsLeft}</b></div>
-            </div>
-            <div class="team-roster"><h4 class="roster-title">Players (${stats.bought.length})</h4>${rosterHtml}</div>
-          </article>
-        `;
-      }).join("");
-
-      wrap.querySelectorAll('.roster-item[data-player-id]').forEach(elem => {
-        elem.addEventListener('click', () => openPlayerOverview(elem.dataset.playerId));
+        container.querySelectorAll('.roster-item[data-player-id]').forEach(elem => {
+          elem.addEventListener('click', () => openPlayerOverview(elem.dataset.playerId));
+        });
       });
     }
 
     function buildPlayerCardHtml(p, rank) {
       const isSold = p.status === "Sold";
+      const isBellActive = state.subscribedPlayerIds.has(p.id);
+      const cityStr = String(p.city || "").trim();
 
       return `
         <article class="player-card" data-player-id="${p.id}">
           <div class="player-card-left">
             <span class="player-rank">${rank}</span>
-            <img class="player-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}">
-            <div>
-              <h3 class="player-name-row">${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${p.name}</h3>
-              <div class="player-skills"><span>🏏 ${p.batting||"-"}</span><span>🥎 ${p.bowling||"-"}</span></div>
+            <img class="player-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}">
+            <div style="min-width: 0;">
+              <h3 class="player-name-row">${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${escapeHtml(p.name)}</h3>
+              <div class="player-skills">
+                ${cityStr ? `<span>📍 ${escapeHtml(cityStr)}</span>` : ''}
+                <span>🏏 ${escapeHtml(p.batting || "-")}</span>
+                <span>🥎 ${escapeHtml(p.bowling || "-")}</span>
+              </div>
             </div>
           </div>
 
-          <div class="player-card-right">
-            <span class="${statusStyle(p.status)}">${p.status || "Pending"}</span>
-            ${isSold ? `<span class="player-team-name">${p.soldToTeamName}</span><strong class="player-sold-price" style="${p.isCaptain ? 'color: var(--accent-blue);' : 'color: var(--accent-gold);'}">${formatPrice(p.soldPrice, p.isCaptain)}</strong>` : `<span class="player-round">${p.isCaptain ? 'SPPL CAPTAIN' : 'Round ' + (p.auctionRound||1)}</span>`}
+          <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+            <div class="player-card-right">
+              <span class="${statusStyle(p.status)}">${p.status || "Pending"}</span>
+              ${isSold ? `<span class="player-team-name">${escapeHtml(p.soldToTeamName)}</span><strong class="player-sold-price" style="${p.isCaptain ? 'color: var(--accent-blue);' : 'color: var(--accent-gold);'}">${formatPrice(p.soldPrice, p.isCaptain)}</strong>` : `<span class="player-round">${p.isCaptain ? 'SPPL CAPTAIN' : 'Round ' + (p.auctionRound||1)}</span>`}
+            </div>
+            <button class="bell-btn ${isBellActive ? 'active' : ''}" data-bell-id="${p.id}" title="${isBellActive ? 'Unpin Player' : 'Pin Player'}">
+              ${isBellActive ? '📌' : '🔕'}
+            </button>
           </div>
         </article>`;
     }
 
     function renderPlayers() {
       const wrap = $("playersList");
+      const q = state.searchQuery.trim().toLowerCase();
       let filtered = state.players.filter(p => {
         let mStatus = false;
         if (state.activeFilter === "All") mStatus = true;
         else if (state.activeFilter === "Sold") mStatus = p.status === "Sold";
         else if (state.activeFilter === "Unsold") mStatus = p.status === "Unsold";
         else if (state.activeFilter === "Pending") mStatus = (!p.status || p.status === "Pending");
+        else if (state.activeFilter === "Pinned") mStatus = state.subscribedPlayerIds.has(p.id);
 
-        const mSearch = !state.searchQuery || (p.name || "").toLowerCase().includes(state.searchQuery.toLowerCase());
+        const mSearch = !q
+          || (p.name || "").toLowerCase().includes(q)
+          || (p.city || "").toLowerCase().includes(q);
         return mStatus && mSearch;
       });
 
@@ -1028,6 +1405,10 @@
         </div>
       `;
 
+      wrap.querySelectorAll('.bell-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => toggleNotification(btn.dataset.bellId, e));
+      });
+
       wrap.querySelectorAll('.player-card').forEach(elem => {
         elem.addEventListener('click', () => openPlayerOverview(elem.dataset.playerId));
       });
@@ -1042,13 +1423,18 @@
       }
       list.innerHTML = state.feed.map(item => `
         <li class="feed-item">
-          <span class="feed-item-text">${item.text}</span>
+          <span class="feed-item-text">${escapeHtml(item.text)}</span>
           <small class="feed-item-time">${item.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</small>
         </li>
       `).join("");
     }
 
     function showSoldOverlay(player) {
+      if (soldHideTimer) clearTimeout(soldHideTimer);
+      if (soldConfettiTimer) clearTimeout(soldConfettiTimer);
+      if (unsoldHideTimer) clearTimeout(unsoldHideTimer);
+      $("unsoldOverlay").classList.remove("show");
+
       const overlay = $("resultOverlay");
       overlay.querySelector(".confetti-wrap")?.remove();
       
@@ -1068,26 +1454,72 @@
       $("soldBadge").className = `overlay-badge ${player.isCaptain ? 'text-[#60a5fa] bg-[#60a5fa]/20 border-[#60a5fa]/30' : ''}`;
       
       $("oName").textContent = (player.isCaptain ? '👑 ' : '') + (player.isIconPlayer ? '⭐ ' : '') + (player.isChitPlayer ? '🎟️ ' : '') + (player.name || "Player");
+
+      const soldCity = String(player.city || "").trim();
+      const oCityEl = $("oCity");
+      if (soldCity) {
+        oCityEl.textContent = `📍 ${soldCity}`;
+        oCityEl.style.display = "block";
+      } else {
+        oCityEl.textContent = "";
+        oCityEl.style.display = "none";
+      }
       
       $("soldDivider").className = `overlay-divider ${player.isCaptain ? 'bg-[#60a5fa]' : 'bg-[var(--accent-green)]'}`;
       
-      $("oMeta").innerHTML = `<span style="font-weight:700;color:var(--text-muted);">${player.soldToTeamName || "Team"}</span> <br> <b style="font-size:24px;margin-top:8px;display:inline-block;font-weight:800;color:${player.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(player.soldPrice, player.isCaptain)}</b>`;
+      $("oMeta").innerHTML = `<span style="font-weight:700;color:var(--text-muted);">${escapeHtml(player.soldToTeamName || "Team")}</span> <br> <b style="font-size:24px;margin-top:8px;display:inline-block;font-weight:800;color:${player.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(player.soldPrice, player.isCaptain)}</b>`;
 
       overlay.querySelector('.overlay-card').prepend(confetti);
       overlay.classList.add("show");
-      setTimeout(() => overlay.classList.remove("show"), 3200);
-      setTimeout(() => confetti.remove(), 3600);
+      soldHideTimer = setTimeout(() => { overlay.classList.remove("show"); soldHideTimer = null; }, 3200);
+      soldConfettiTimer = setTimeout(() => { confetti.remove(); soldConfettiTimer = null; }, 3600);
     }
 
     function showUnsoldOverlay(player) {
+      if (soldHideTimer) clearTimeout(soldHideTimer);
+      if (unsoldHideTimer) clearTimeout(unsoldHideTimer);
+      $("resultOverlay").classList.remove("show");
+
       const overlay = $("unsoldOverlay");
       $("uName").textContent = (player.isCaptain ? '👑 ' : '') + (player.name || "Player");
+
+      const unsoldCity = String(player.city || "").trim();
+      const uCityEl = $("uCity");
+      if (unsoldCity) {
+        uCityEl.textContent = `📍 ${unsoldCity}`;
+        uCityEl.style.display = "block";
+      } else {
+        uCityEl.textContent = "";
+        uCityEl.style.display = "none";
+      }
+
       overlay.classList.add("show");
-      setTimeout(() => overlay.classList.remove("show"), 3000);
+      unsoldHideTimer = setTimeout(() => { overlay.classList.remove("show"); unsoldHideTimer = null; }, 3000);
+    }
+
+    function triggerLiveAlert(p) {
+      $("alertPlayerName").textContent = `${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.name}`;
+      const cityStr = String(p.city || "").trim();
+      const alertCityEl = $("alertPlayerCity");
+      if (cityStr) {
+        alertCityEl.textContent = `📍 ${cityStr}`;
+        alertCityEl.style.display = "block";
+      } else {
+        alertCityEl.textContent = "";
+        alertCityEl.style.display = "none";
+      }
+
+      $("liveAlertModal").classList.add("show");
+      if (liveAlertTimeout) clearTimeout(liveAlertTimeout);
+      liveAlertTimeout = setTimeout(() => {
+        $("liveAlertModal").classList.remove("show");
+      }, 5000);
     }
 
     function detectPlayerChanges(players) {
       const isAuctionEnded = state.settings?.auctionEnded || state.settings?.status === "Ended";
+      const newlySoldForTrackedTeam = [];
+      const trackedTeamId = state.pinnedTeamId || state.selectedTeamId;
 
       players.forEach(player => {
         const oldStatus = state.prevStatusMap.get(player.id);
@@ -1100,6 +1532,9 @@
               if (!isAuctionEnded && !player.isIconPlayer && !state.isFirstPlayersLoad) {
                   showSoldOverlay(player);
               }
+              if (trackedTeamId && player.soldToTeamId === trackedTeamId) {
+                  newlySoldForTrackedTeam.push(player);
+              }
             }
             if (newStatus === "Unsold" && oldStatus !== "Unsold") {
               pushFeed(`❌ ${player.isCaptain ? '👑 ' : ''}${player.name} marked unsold`);
@@ -1111,6 +1546,7 @@
         }
       });
       state.prevStatusMap = new Map(players.map(p => [p.id, p.status || "Pending"]));
+      return { newlySoldForTrackedTeam, trackedTeamId };
     }
 
     function renderAll() {
@@ -1203,13 +1639,30 @@
     $("closeOverviewBtn").addEventListener("click", () => $("playerOverviewModal").classList.remove("show"));
     $("playerOverviewModal").addEventListener("click", (e) => { if (e.target === $("playerOverviewModal")) $("playerOverviewModal").classList.remove("show"); });
 
+    $("closeAlertBtn").addEventListener("click", () => {
+      if (liveAlertTimeout) clearTimeout(liveAlertTimeout);
+      $("liveAlertModal").classList.remove("show");
+    });
+
+    $("skipTeamSelectBtn").addEventListener("click", skipTeamSelection);
+    $("closeWelcomeBtn").addEventListener("click", () => {
+      if (welcomeTimeout) clearTimeout(welcomeTimeout);
+      $("welcomeOwnerModal").classList.remove("show");
+    });
+    $("welcomeOwnerModal").addEventListener("click", (e) => {
+      if (e.target === $("welcomeOwnerModal")) {
+        if (welcomeTimeout) clearTimeout(welcomeTimeout);
+        $("welcomeOwnerModal").classList.remove("show");
+      }
+    });
+
     // Robust clipboard fallback helper
-    async function copyToClipboard(text) {
+    async function copyToClipboard(text, successMsg = "🔗 Link copied to clipboard!") {
       // 1. Try modern clipboard API if available and secure
       if (navigator.clipboard && window.isSecureContext) {
         try {
           await navigator.clipboard.writeText(text);
-          showToast("🔗 Link copied to clipboard!");
+          showToast(successMsg);
           return;
         } catch (err) {
           console.warn("Clipboard API failed, trying legacy fallback.", err);
@@ -1220,7 +1673,6 @@
       try {
         const textArea = document.createElement("textarea");
         textArea.value = text;
-        // Prevent scrolling to bottom
         textArea.style.top = "0";
         textArea.style.left = "0";
         textArea.style.position = "fixed";
@@ -1232,7 +1684,7 @@
         document.body.removeChild(textArea);
         
         if (successful) {
-          showToast("🔗 Link copied to clipboard!");
+          showToast(successMsg);
         } else {
           showToast("Failed to copy link");
         }
@@ -1242,35 +1694,46 @@
       }
     }
 
-    // Share Button Handling
+    // Share Button Handling (Organizer Invitation to Team Owners)
     $("shareBtn").addEventListener("click", async () => {
       if (!currentAuctionId) {
         showToast("⚠️ No active auction to share.");
         return;
       }
-      
+
+      const s = state.settings || {};
+      const tName = s.tournamentName || "Live Cricket Auction";
+      const parsedDate = s.date ? new Date(s.date) : null;
+      const formattedDate = parsedDate && !isNaN(parsedDate.getTime())
+        ? parsedDate.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+        : "";
+      const schedule = [formattedDate, s.time].filter(Boolean).join(" • ");
+      const location = [s.venue, s.city].filter(Boolean).join(", ");
+      const eventDetails = [
+        schedule ? `📅 ${schedule}` : "",
+        location ? `📍 ${location}` : ""
+      ].filter(Boolean).join("\n");
+
       const shareUrl = `${window.location.origin}${window.location.pathname}?auction=${currentAuctionId}`;
-      const tName = state.settings?.tournamentName || 'tournament';
-      const shareTitle = `${tName} - Auctify`;
+      const caption = `🏏 Official Invitation to All Team Owners!\n\nYou are cordially invited by the organizers to join the ${tName} Live Player Auction.${eventDetails ? `\n\n${eventDetails}` : ""}\n\nOpen the link below, select your team to pin your dashboard, and track live bids, purse balance & squad updates in real time:`;
+
       const shareData = {
-        title: shareTitle,
-        text: `Watch the live auction for ${tName}!`,
+        title: `${tName} - Team Owner Invitation`,
+        text: caption,
         url: shareUrl
       };
       
-      // Check if native sharing is fully supported for this data
-      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      // Use native Web Share API where supported, fallback to clipboard
+      if (navigator.share && (!navigator.canShare || navigator.canShare(shareData))) {
         try {
           await navigator.share(shareData);
         } catch (err) {
-          // Ignore if the user intentionally dismissed the share sheet
           if (err.name !== "AbortError") {
-            await copyToClipboard(shareUrl);
+            await copyToClipboard(`${caption}\n${shareUrl}`, "🔗 Team owner invitation & link copied to clipboard!");
           }
         }
       } else {
-        // Native share not supported, fallback to clipboard
-        await copyToClipboard(shareUrl);
+        await copyToClipboard(`${caption}\n${shareUrl}`, "🔗 Team owner invitation & link copied to clipboard!");
       }
     });
 
@@ -1283,10 +1746,16 @@
         const liveId = state.settings?.livePlayerId || "";
         if (liveId && liveId !== state.prevLiveId) {
           const player = state.players.find(p => p.id === liveId);
-          if (player) pushFeed(`🎯 On the Block: ${player.isCaptain ? '👑 ' : ''}${player.name}`);
+          if (player) {
+            pushFeed(`🎯 On the Block: ${player.isCaptain ? '👑 ' : ''}${player.name}`);
+            if (state.subscribedPlayerIds.has(player.id)) {
+              triggerLiveAlert(player);
+            }
+          }
         }
         state.prevLiveId = liveId;
         renderAll();
+        checkTeamOnboarding();
       });
 
       let isFirstTeamsLoad = true;
@@ -1298,7 +1767,7 @@
             const newTopUp = Number(team.topUp) || 0;
             if (newTopUp > oldTopUp) {
               const diff = newTopUp - oldTopUp;
-              showToast(`💰 <b>${team.name}</b> received a top-up of <span style="color:var(--accent-gold)">${money(diff)}</span>!`);
+              showToast(`💰 <b>${escapeHtml(team.name)}</b> received a top-up of <span style="color:var(--accent-gold)">${money(diff)}</span>!`);
               pushFeed(`💰 ${team.name} purse topped up by ${money(diff)}`);
             }
           });
@@ -1307,13 +1776,15 @@
         isFirstTeamsLoad = false;
         state.teams = newTeams;
         renderAll();
+        checkTeamOnboarding();
       });
 
       unsubPlayers = onSnapshot(playersCol, snap => {
         const players = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        let purchaseResult = { newlySoldForTrackedTeam: [], trackedTeamId: null };
         
         if (!state.isFirstPlayersLoad) {
-            detectPlayerChanges(players);
+            purchaseResult = detectPlayerChanges(players);
         } else {
             state.prevStatusMap = new Map(players.map(p => [p.id, p.status || "Pending"]));
             state.isFirstPlayersLoad = false;
@@ -1321,6 +1792,14 @@
 
         state.players = players;
         renderAll();
+
+        if (purchaseResult.newlySoldForTrackedTeam.length && purchaseResult.trackedTeamId) {
+            const myTeam = state.teams.find(t => t.id === purchaseResult.trackedTeamId);
+            if (myTeam) {
+                const updatedStats = getTeamStats(myTeam);
+                purchaseResult.newlySoldForTrackedTeam.forEach(p => showTeamPurchaseNotification(myTeam, p, updatedStats));
+            }
+        }
       });
     }
 
