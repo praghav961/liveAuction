@@ -24,8 +24,9 @@
   </script>
 
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
-  <link rel="preconnect" href="https://www.gstatic.com">
-  <link rel="preconnect" href="https://res.cloudinary.com">
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
   
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -158,7 +159,8 @@
       position: absolute; inset: 0; padding: 12px;
       overflow-y: auto; overflow-x: hidden; touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
       opacity: 0; visibility: hidden; pointer-events: none; transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0.25s ease;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, visibility 0.2s ease;
+      will-change: transform;
       display: flex; flex-direction: column; gap: 16px;
     }
     .screen.screen--tight { gap: 12px; }
@@ -197,8 +199,8 @@
 
     /* ============ Feed ============ */
     .feed-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
-    .empty-state { font-size: 12px; color: var(--text-faint); text-align: center; padding: 24px 0; font-weight: 500; }
-    .feed-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; background-color: var(--surface-hover); border: 1px solid var(--border-light); font-size: 12px; animation: fadeIn 0.3s ease; }
+    .empty-state { font-size: 13px; color: var(--text-faint); text-align: center; padding: 32px 0; font-weight: 500; }
+    .feed-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; background-color: var(--surface-hover); border: 1px solid var(--border-light); font-size: 12px; animation: fadeIn 0.25s ease; }
     .feed-item-text { color: var(--text-main); font-weight: 500; }
     .feed-item-time { font-size: 9px; font-weight: 700; color: var(--text-faint); background-color: var(--bg); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); flex-shrink: 0; }
 
@@ -206,8 +208,8 @@
     .screen-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border-light); }
     .screen-title { font-size: 14px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
 
-    .teams-dashboard { display: flex; flex-direction: column; gap: 12px; padding-bottom: 24px; }
-    .team-card { border-radius: 16px; background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%); border: 1px solid var(--border-light); padding: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .teams-dashboard { display: flex; flex-direction: column; gap: 12px; padding-bottom: 24px; contain: layout style; }
+    .team-card { border-radius: 16px; background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%); border: 1px solid var(--border-light); padding: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); content-visibility: auto; contain-intrinsic-size: 280px; }
     .team-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light); }
     .team-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .team-avatar { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 1px solid var(--border); background-color: var(--bg); flex-shrink: 0; padding: 2px;}
@@ -240,8 +242,8 @@
     .filter-btn { flex-shrink: 0; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background-color: var(--bg); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); transition: all 0.2s ease; cursor: pointer; }
     .filter-btn.active { background: var(--surface-hover); border-color: var(--border); color: var(--text-main); }
 
-    .players-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 24px; }
-    .player-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 12px; background-color: var(--surface); border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: 0.2s; }
+    .players-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 24px; contain: layout style; }
+    .player-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 12px; background-color: var(--surface); border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: 0.2s; content-visibility: auto; contain-intrinsic-size: 64px; }
     .player-card:active { background-color: var(--surface-hover); border-color: var(--border); transform: scale(0.98); }
     .player-card-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;}
     .player-rank { font-size: 11px; font-weight: 700; color: var(--text-faint); width: 18px; text-align: center; flex-shrink: 0; }
@@ -266,9 +268,9 @@
     .tab-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
 
     /* ============ Overlay Layouts ============ */
-    .result-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background-color: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease; padding: 16px; }
+    .result-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background-color: rgba(9, 9, 11, 0.85); backdrop-filter: blur(8px); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.25s ease, visibility 0.25s ease; will-change: opacity; padding: 16px; }
     .result-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
-    .overlay-card { position: relative; z-index: 1; width: 320px; padding: 32px; text-align: center; border-radius: 24px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 24px 64px rgba(0,0,0,0.5); overflow: hidden; animation: soldWrapPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+    .overlay-card { position: relative; z-index: 1; width: 320px; padding: 32px; text-align: center; border-radius: 24px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 24px 64px rgba(0,0,0,0.5); overflow: hidden; will-change: transform, opacity; animation: soldWrapPop 0.45s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
     @keyframes soldWrapPop { 0% { transform: scale(0.82) rotate(-3deg); } 60% { transform: scale(1.06) rotate(2deg); } 100% { transform: scale(1) rotate(0deg); } }
     .overlay-content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; }
     .overlay-badge { display: inline-flex; padding: 10px 32px; border-radius: 100px; color: var(--accent-green); background-color: var(--accent-green-glow); border: 1px solid rgba(52,211,153,0.3); font-size: 16px; font-weight: 800; letter-spacing: 2px; margin-bottom: 24px; }
@@ -278,15 +280,14 @@
     .overlay-label { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .overlay-meta { font-size: 20px; font-weight: 800; }
 
-    .confetti-wrap { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-    .confetti-wrap span { position: absolute; left: 50%; top: 50%; width: 6px; height: 16px; border-radius: 4px; background: hsl(calc(var(--i) * 38), 90%, 65%); opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot)); animation: confettiWrap 1.35s ease-out var(--delay) forwards; }
+    .confetti-wrap { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; contain: layout style paint; }
+    .confetti-wrap span { position: absolute; left: 50%; top: 50%; width: 6px; height: 16px; border-radius: 4px; background: hsl(calc(var(--i) * 38), 90%, 65%); opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot)); will-change: transform, opacity; animation: confettiWrap 1.35s ease-out var(--delay) forwards; }
     @keyframes confettiWrap { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(var(--rot)); } 18% { opacity: 1; } 100% { opacity: 0; transform: translate(calc(-50% + var(--x)), -210px) rotate(calc(var(--rot) + 420deg)); } }
 
-    .overlay-card-unsold { animation: unsoldStamp 0.45s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+    .overlay-card-unsold { animation: unsoldStamp 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
     @keyframes unsoldStamp { 0% { transform: scale(1.8) rotate(10deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
     .overlay-badge-unsold { color: var(--accent-red); background-color: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.3); }
     .overlay-divider-unsold { background: var(--accent-red); }
-    .empty-state { font-size: 13px; color: var(--text-faint); text-align: center; padding: 32px 0; font-weight: 500; }
 
     /* Player Detail Overview Modal Style */
     .player-modal-card {
@@ -429,7 +430,7 @@
     </div>
     <div class="absolute bottom-12 flex flex-col items-center opacity-50 hover:opacity-100 transition-opacity duration-500">
       <p class="text-[var(--text-faint)] text-[9px] font-bold uppercase tracking-[0.2em] mb-1.5">Developed by</p>
-      <p class="text-[var(--text-muted)] text-xs font-semibold tracking-[0.1em]">Raghav Patel</p>
+      <p class="text-[var(--text-muted)] text-xs font-semibold tracking-[0.1em]">Raghav Mahendra Patel</p>
     </div>
   </div>
 
@@ -438,7 +439,7 @@
   <!-- ================= LOBBY VIEW ================= -->
   <div id="lobbyView" class="app-shell" style="display: none;">
     <div class="flex items-center gap-3 p-4 border-b border-[var(--border-light)] bg-[var(--surface)] relative z-10 shadow-sm">
-        <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify" class="w-10 h-10 object-contain rounded-lg bg-[var(--bg)] border border-[var(--border)] p-1" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=A'">
+        <img src="logo.PNG" alt="Auctify" class="w-10 h-10 object-contain rounded-lg bg-[var(--bg)] border border-[var(--border)] p-1" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=A'">
         <div>
             <h2 class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[var(--accent-gold)] tracking-tight">Auctify Viewer</h2>
             <p class="text-[10px] text-[var(--text-faint)] font-bold uppercase tracking-widest mt-0.5">Select a Workspace</p>
@@ -457,7 +458,7 @@
         <button class="icon-badge" onclick="exitToLobby()" title="Back to Lobby">
           ⬅
         </button>
-        <img id="headerTournamentLogo" src="" alt="Tournament Logo" class="w-10 h-10 object-cover rounded-xl bg-[var(--bg)] border border-[var(--border-light)] p-0.5 hidden shrink-0" />
+        <img id="headerTournamentLogo" src="" alt="Tournament Logo" decoding="async" class="w-10 h-10 object-cover rounded-xl bg-[var(--bg)] border border-[var(--border-light)] p-0.5 hidden shrink-0" />
         <div class="header-text">
           <h1 class="header-title">
             AUCTION
@@ -655,7 +656,16 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, doc, collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import {
+      initializeFirestore,
+      getFirestore,
+      persistentLocalCache,
+      persistentMultipleTabManager,
+      doc,
+      collection,
+      onSnapshot,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBB9VJE5KQ7hNkuGVp1KYoUo6GHlblC6eI",
@@ -669,7 +679,15 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    let db;
+    try {
+      db = initializeFirestore(app, {
+        localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+      });
+    } catch (_) {
+      db = getFirestore(app);
+    }
+
     const auctionsCol = collection(db, "auctions");
 
     let currentAuctionId = null;
@@ -677,23 +695,44 @@
     let teamsCol = null;
     let playersCol = null;
     
-    let unsubSettings, unsubTeams, unsubPlayers;
+    let unsubSettings = null;
+    let unsubTeams = null;
+    let unsubPlayers = null;
     let soldHideTimer = null;
     let soldConfettiTimer = null;
     let unsoldHideTimer = null;
-    
+    let searchDebounceTimer = null;
+    let rafId = null;
+    let lobbyCacheTime = 0;
+    let lobbyCacheHtml = "";
+    const LOBBY_CACHE_TTL = 30000;
+
     // Core State Map
     const state = {
       settings: null,
       teams: [],
       players: [],
+      playerMap: new Map(),
       feed: [],
       prevLiveId: "",
       prevStatusMap: new Map(),
       prevTeamTopUpMap: new Map(),
+      preloadedUrls: new Set(),
       activeFilter: "All",
       searchQuery: "",
-      isFirstPlayersLoad: true 
+      isFirstPlayersLoad: true,
+      isFirstTeamsLoad: true,
+      lastEndedState: null,
+      lastLiveRenderKey: "",
+      lastHeaderLogoSrc: ""
+    };
+
+    const dirty = {
+      summary: false,
+      live: false,
+      teams: false,
+      players: false,
+      feed: false
     };
 
     let screenOrder = ["screenLive", "screenTeams", "screenPlayers"];
@@ -701,26 +740,154 @@
 
     const $ = id => document.getElementById(id);
 
+    const el = {
+      splashScreen: $("splashScreen"),
+      toastContainer: $("toastContainer"),
+      lobbyView: $("lobbyView"),
+      lobbyList: $("lobbyList"),
+      appView: $("appView"),
+      headerTournamentLogo: $("headerTournamentLogo"),
+      headerTournament: $("headerTournament"),
+      liveBadge: $("liveBadge"),
+      sTeams: $("sTeams"),
+      sPlayers: $("sPlayers"),
+      sPurse: $("sPurse"),
+      sRound: $("sRound"),
+      sSold: $("sSold"),
+      sUnsold: $("sUnsold"),
+      sPending: $("sPending"),
+      screenWrap: $("screenWrap"),
+      currentBadge: $("currentBadge"),
+      currentPlayerArea: $("currentPlayerArea"),
+      feedCountBadge: $("feedCountBadge"),
+      feedList: $("feedList"),
+      teamCountBadge: $("teamCountBadge"),
+      teamsDashboard: $("teamsDashboard"),
+      playerTableBadge: $("playerTableBadge"),
+      playerSearch: $("playerSearch"),
+      playersList: $("playersList"),
+      tabLive: $("tabLive"),
+      resultOverlay: $("resultOverlay"),
+      soldBadge: $("soldBadge"),
+      oName: $("oName"),
+      oCity: $("oCity"),
+      soldDivider: $("soldDivider"),
+      oMeta: $("oMeta"),
+      unsoldOverlay: $("unsoldOverlay"),
+      uName: $("uName"),
+      uCity: $("uCity"),
+      playerOverviewModal: $("playerOverviewModal"),
+      overviewContent: $("overviewContent"),
+      photoZoomModal: $("photoZoomModal"),
+      zoomPlayerName: $("zoomPlayerName"),
+      photoZoomStage: $("photoZoomStage"),
+      zoomPhotoImg: $("zoomPhotoImg"),
+      zoomOutBtn: $("zoomOutBtn"),
+      zoomResetBtn: $("zoomResetBtn"),
+      zoomInBtn: $("zoomInBtn"),
+      infoModal: $("infoModal")
+    };
+
     function escapeHtml(str = "") {
       return String(str).replace(/[&<>"']/g, ch => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
       }[ch]));
     }
-    
+
+    function setText(node, val) {
+      const str = String(val);
+      if (node.textContent !== str) node.textContent = str;
+    }
+
     function money(val) { return Number(val || 0).toLocaleString("en-IN") + " PTS"; }
     function rupees(val) { return "₹ " + Number(val || 0).toLocaleString("en-IN"); }
     function formatPrice(val, isCaptain) { return isCaptain ? rupees(val) : money(val); }
-
     function placeholder(text = "?", size = 150) { return `https://placehold.co/${size}x${size}/18181b/a1a1aa?text=${encodeURIComponent(text || "?")}`; }
 
+    function buildOverlayMeta(player) {
+      const parts = [];
+      const role = String(player.role || "").trim();
+      const city = String(player.city || "").trim();
+      if (role) parts.push(role);
+      if (city) parts.push(`📍 ${city}`);
+      return parts.join("  •  ");
+    }
+
     function showToast(message) {
-      const container = $("toastContainer");
-      if (!container) return;
+      if (!el.toastContainer) return;
       const toast = document.createElement("div");
       toast.className = "toast-msg";
       toast.innerHTML = message;
-      container.appendChild(toast);
+      el.toastContainer.appendChild(toast);
       setTimeout(() => toast.remove(), 4000);
+    }
+
+    function getActiveScreenId() {
+      return activeScreenIndex >= 0 ? screenOrder[activeScreenIndex] : "";
+    }
+
+    function flushRenders() {
+      rafId = null;
+      if (document.hidden) return;
+
+      const activeId = getActiveScreenId();
+      if (dirty.summary) {
+        dirty.summary = false;
+        renderSummary();
+      }
+      const currentActiveId = getActiveScreenId() || activeId;
+      if (dirty.live && currentActiveId === "screenLive") {
+        dirty.live = false;
+        renderCurrentPlayer();
+      }
+      if (dirty.feed && currentActiveId === "screenLive") {
+        dirty.feed = false;
+        renderFeed();
+      }
+      if (dirty.teams && currentActiveId === "screenTeams") {
+        dirty.teams = false;
+        renderTeams();
+      }
+      if (dirty.players && currentActiveId === "screenPlayers") {
+        dirty.players = false;
+        renderPlayers();
+      }
+    }
+
+    function scheduleRender(flags = {}) {
+      if (flags.summary) dirty.summary = true;
+      if (flags.live) dirty.live = true;
+      if (flags.teams) dirty.teams = true;
+      if (flags.players) dirty.players = true;
+      if (flags.feed) dirty.feed = true;
+      if (document.hidden || rafId !== null) return;
+      rafId = requestAnimationFrame(flushRenders);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && currentAuctionId) {
+        if (dirty.summary || dirty.live || dirty.teams || dirty.players || dirty.feed) {
+          if (rafId === null) rafId = requestAnimationFrame(flushRenders);
+        }
+      }
+    });
+
+    function preloadUpcomingPhotos() {
+      const pending = [];
+      for (const p of state.players) {
+        if ((!p.status || p.status === "Pending") && p.imageUrl) pending.push(p);
+      }
+      pending.sort((a, b) => Number(a.auctionOrder || 0) - Number(b.auctionOrder || 0));
+
+      for (let i = 0; i < Math.min(2, pending.length); i++) {
+        const url = pending[i].imageUrl;
+        if (!state.preloadedUrls.has(url)) {
+          state.preloadedUrls.add(url);
+          const img = new Image();
+          img.decoding = "async";
+          img.src = url;
+        }
+      }
     }
 
     // ============================================
@@ -747,7 +914,7 @@
         zoomTranslateY = 0;
         return;
       }
-      const img = $("zoomPhotoImg");
+      const img = el.zoomPhotoImg;
       const maxX = Math.max(0, (img.offsetWidth * (zoomScale - 1)) / 2 + 40);
       const maxY = Math.max(0, (img.offsetHeight * (zoomScale - 1)) / 2 + 40);
       zoomTranslateX = Math.min(maxX, Math.max(-maxX, zoomTranslateX));
@@ -755,15 +922,15 @@
     }
 
     function applyZoomTransform(animate = false) {
-      const img = $("zoomPhotoImg");
+      const img = el.zoomPhotoImg;
       if (!img) return;
       img.style.transition = animate ? "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)" : "none";
       img.style.transform = `translate3d(${zoomTranslateX}px, ${zoomTranslateY}px, 0) scale(${zoomScale})`;
       img.classList.toggle("is-zoomed", zoomScale > 1);
 
-      $("zoomResetBtn").textContent = `${Math.round(zoomScale * 100)}%`;
-      $("zoomOutBtn").disabled = zoomScale <= ZOOM_MIN + 0.01;
-      $("zoomInBtn").disabled = zoomScale >= ZOOM_MAX - 0.01;
+      el.zoomResetBtn.textContent = `${Math.round(zoomScale * 100)}%`;
+      el.zoomOutBtn.disabled = zoomScale <= ZOOM_MIN + 0.01;
+      el.zoomInBtn.disabled = zoomScale >= ZOOM_MAX - 0.01;
     }
 
     function setZoomScale(nextScale, animate = true) {
@@ -779,10 +946,10 @@
 
     function openPhotoZoom(player) {
       if (!player) return;
-      const img = $("zoomPhotoImg");
+      const img = el.zoomPhotoImg;
       const prefix = `${player.isCaptain ? "👑 " : ""}${player.isIconPlayer ? "⭐ " : ""}${player.isChitPlayer ? "🎟️ " : ""}`;
       const cityStr = String(player.city || "").trim();
-      $("zoomPlayerName").textContent = `${prefix}${player.name || "Player"}${cityStr ? ` • ${cityStr}` : ""}`;
+      el.zoomPlayerName.textContent = `${prefix}${player.name || "Player"}${cityStr ? ` • ${cityStr}` : ""}`;
 
       const fallbackSrc = placeholder(player.name?.[0], 600);
       img.onerror = () => { img.onerror = null; img.src = fallbackSrc; };
@@ -797,15 +964,13 @@
       isMouseDragging = false;
       applyZoomTransform(false);
 
-      const modal = $("photoZoomModal");
-      modal.classList.add("show");
-      modal.setAttribute("aria-hidden", "false");
+      el.photoZoomModal.classList.add("show");
+      el.photoZoomModal.setAttribute("aria-hidden", "false");
     }
 
     function closePhotoZoom() {
-      const modal = $("photoZoomModal");
-      modal.classList.remove("show");
-      modal.setAttribute("aria-hidden", "true");
+      el.photoZoomModal.classList.remove("show");
+      el.photoZoomModal.setAttribute("aria-hidden", "true");
       isPinching = false;
       isTouchDragging = false;
       isMouseDragging = false;
@@ -813,18 +978,18 @@
 
     // Lightbox Buttons & Backdrop
     $("closePhotoZoomBtn").addEventListener("click", closePhotoZoom);
-    $("zoomInBtn").addEventListener("click", () => setZoomScale(zoomScale + ZOOM_STEP, true));
-    $("zoomOutBtn").addEventListener("click", () => setZoomScale(zoomScale - ZOOM_STEP, true));
-    $("zoomResetBtn").addEventListener("click", () => setZoomScale(1, true));
-    $("photoZoomStage").addEventListener("click", (e) => {
-      if (e.target === $("photoZoomStage") && zoomScale <= 1.01) {
+    el.zoomInBtn.addEventListener("click", () => setZoomScale(zoomScale + ZOOM_STEP, true));
+    el.zoomOutBtn.addEventListener("click", () => setZoomScale(zoomScale - ZOOM_STEP, true));
+    el.zoomResetBtn.addEventListener("click", () => setZoomScale(1, true));
+    el.photoZoomStage.addEventListener("click", (e) => {
+      if (e.target === el.photoZoomStage && zoomScale <= 1.01) {
         closePhotoZoom();
       }
     });
 
     // Touch Pinch-to-Zoom, Pan & Double-Tap
-    const zoomStage = $("photoZoomStage");
-    const zoomImg = $("zoomPhotoImg");
+    const zoomStage = el.photoZoomStage;
+    const zoomImg = el.zoomPhotoImg;
 
     zoomStage.addEventListener("touchstart", (e) => {
       if (e.touches.length === 2) {
@@ -919,7 +1084,7 @@
     });
 
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && $("photoZoomModal").classList.contains("show")) {
+      if (e.key === "Escape" && el.photoZoomModal.classList.contains("show")) {
         closePhotoZoom();
       }
     });
@@ -927,13 +1092,17 @@
     // ============================================
     // LOBBY SETUP
     // ============================================
-    window.loadLobby = async () => {
-      const wrap = $("lobbyList");
+    window.loadLobby = async (force = false) => {
+      const wrap = el.lobbyList;
+      if (!force && lobbyCacheHtml && (Date.now() - lobbyCacheTime) < LOBBY_CACHE_TTL) {
+        wrap.innerHTML = lobbyCacheHtml;
+        return;
+      }
       try {
         const snap = await getDocs(auctionsCol);
         
         if (snap.empty) {
-          wrap.innerHTML = `
+          lobbyCacheHtml = `
             <div class="flex flex-col items-center justify-center py-20 px-4 text-center">
               <div class="w-20 h-20 mb-6 opacity-30 grayscale">
                 <img src="ChatGPT Image Aug 1, 2026, 07_49_14 PM.png" alt="Auctify" class="w-full h-full object-contain drop-shadow-md" onerror="this.src='https://placehold.co/200x200/18181b/fbbf24?text=Auctify'" />
@@ -941,6 +1110,8 @@
               <h3 class="text-lg font-bold text-[var(--text-main)] mb-2">No active workspaces</h3>
               <p class="text-[var(--text-faint)] text-xs font-medium max-w-[250px]">The administrator hasn't created any tournaments yet. Please check back later.</p>
             </div>`;
+          lobbyCacheTime = Date.now();
+          wrap.innerHTML = lobbyCacheHtml;
           return;
         }
 
@@ -955,15 +1126,11 @@
         auctions.sort((a, b) => {
           const priorityA = getStatusPriority(a);
           const priorityB = getStatusPriority(b);
-          if (priorityA !== priorityB) {
-            return priorityA - priorityB;
-          }
+          if (priorityA !== priorityB) return priorityA - priorityB;
 
           const dateA = a.date ? new Date(a.date).getTime() : 0;
           const dateB = b.date ? new Date(b.date).getTime() : 0;
-          if (dateA !== dateB) {
-            return dateA - dateB;
-          }
+          if (dateA !== dateB) return dateA - dateB;
 
           return (b.createdAt || 0) - (a.createdAt || 0);
         });
@@ -982,7 +1149,7 @@
           }
 
           let formattedDate = 'TBD';
-          if(data.date) formattedDate = new Date(data.date).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+          if (data.date) formattedDate = new Date(data.date).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 
           const logoImage = data.tournamentLogoUrl || placeholder(data.tournamentName?.[0] || 'T');
 
@@ -990,7 +1157,7 @@
             <div class="bg-[var(--surface)] border border-[var(--border-light)] rounded-2xl p-4 mb-4 flex flex-col gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.2)] active:scale-[0.98] transition-transform cursor-pointer" onclick="joinAuction('${data.id}')">
                <div class="flex justify-between items-start gap-2">
                   <div class="flex items-center gap-3 min-w-0">
-                     <img src="${logoImage}" class="w-10 h-10 rounded-lg object-cover bg-[var(--bg)] border border-[var(--border-light)] p-0.5 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=T'"/>
+                     <img src="${logoImage}" loading="lazy" decoding="async" class="w-10 h-10 rounded-lg object-cover bg-[var(--bg)] border border-[var(--border-light)] p-0.5 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/18181b/fbbf24?text=T'"/>
                      <h3 class="text-base font-extrabold text-white leading-tight line-clamp-2">${escapeHtml(data.tournamentName || 'Unnamed Tournament')} ${data.spplMode ? '👑' : ''}</h3>
                   </div>
                   <span class="px-2 py-1 rounded-[6px] text-[9px] font-black uppercase tracking-wider border ${statusClass} shrink-0">${statusText}</span>
@@ -1008,6 +1175,8 @@
             </div>
           `;
         });
+        lobbyCacheHtml = html;
+        lobbyCacheTime = Date.now();
         wrap.innerHTML = html;
       } catch (err) {
         console.error("Error loading workspaces:", err);
@@ -1016,37 +1185,55 @@
     };
 
     window.joinAuction = (id) => {
-       $("lobbyView").style.display = "none";
-       $("appView").style.display = "flex";
+       el.lobbyView.style.display = "none";
+       el.appView.style.display = "flex";
        
        currentAuctionId = id;
        SETTINGS_REF = doc(db, "auctions", id);
        teamsCol = collection(db, "auctions", id, "teams");
        playersCol = collection(db, "auctions", id, "players");
 
+       state.lastEndedState = null;
+       state.lastLiveRenderKey = "";
+       state.lastHeaderLogoSrc = "";
+       state.isFirstPlayersLoad = true;
+       state.isFirstTeamsLoad = true;
+
        switchScreen("screenLive");
        initRealtimeListeners();
     };
 
     window.exitToLobby = () => {
-       if (unsubSettings) unsubSettings();
-       if (unsubTeams) unsubTeams();
-       if (unsubPlayers) unsubPlayers();
-       if (soldHideTimer) clearTimeout(soldHideTimer);
-       if (soldConfettiTimer) clearTimeout(soldConfettiTimer);
-       if (unsoldHideTimer) clearTimeout(unsoldHideTimer);
+       if (unsubSettings) { unsubSettings(); unsubSettings = null; }
+       if (unsubTeams) { unsubTeams(); unsubTeams = null; }
+       if (unsubPlayers) { unsubPlayers(); unsubPlayers = null; }
+       if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+       if (soldHideTimer) { clearTimeout(soldHideTimer); soldHideTimer = null; }
+       if (soldConfettiTimer) { clearTimeout(soldConfettiTimer); soldConfettiTimer = null; }
+       if (unsoldHideTimer) { clearTimeout(unsoldHideTimer); unsoldHideTimer = null; }
+       if (searchDebounceTimer) { clearTimeout(searchDebounceTimer); searchDebounceTimer = null; }
 
        closePhotoZoom();
-       $("playerOverviewModal").classList.remove("show");
-       $("resultOverlay").classList.remove("show");
-       $("unsoldOverlay").classList.remove("show");
+       el.playerOverviewModal.classList.remove("show");
+       el.resultOverlay.classList.remove("show");
+       el.unsoldOverlay.classList.remove("show");
        
+       currentAuctionId = null;
        state.settings = null;
        state.teams = [];
        state.players = [];
+       state.playerMap.clear();
        state.feed = [];
+       state.prevLiveId = "";
        state.prevStatusMap.clear();
+       state.prevTeamTopUpMap.clear();
+       state.preloadedUrls.clear();
        state.isFirstPlayersLoad = true;
+       state.isFirstTeamsLoad = true;
+       state.lastEndedState = null;
+       state.lastLiveRenderKey = "";
+       state.lastHeaderLogoSrc = "";
+       dirty.summary = dirty.live = dirty.teams = dirty.players = dirty.feed = false;
        activeScreenIndex = -1;
        document.querySelectorAll(".screen").forEach(s => s.classList.remove("active", "left", "right"));
 
@@ -1054,8 +1241,8 @@
        url.searchParams.delete('auction');
        window.history.replaceState({}, '', url.pathname);
 
-       $("appView").style.display = "none";
-       $("lobbyView").style.display = "flex";
+       el.appView.style.display = "none";
+       el.lobbyView.style.display = "flex";
        window.loadLobby();
     };
 
@@ -1063,15 +1250,22 @@
     // APPLICATION LOGIC
     // ============================================
 
-    function getTeamStats(team) {
+    function getTeamStats(team, boughtList) {
       const s = state.settings || {};
-      const bought = state.players.filter(p => p.status === "Sold" && p.soldToTeamId === team.id);
+      const bought = boughtList || [];
       
-      const captainsBought = bought.filter(p => p.isCaptain);
-      const regularsBought = bought.filter(p => !p.isCaptain);
-      
-      const spent = regularsBought.reduce((sum, p) => sum + Number(p.soldPrice || 0), 0);
-      const captainSpent = captainsBought.reduce((sum, p) => sum + Number(p.soldPrice || 0), 0);
+      let spent = 0;
+      let captainSpent = 0;
+      let captainsCount = 0;
+      for (const p of bought) {
+        const price = Number(p.soldPrice || 0);
+        if (p.isCaptain) {
+          captainSpent += price;
+          captainsCount++;
+        } else {
+          spent += price;
+        }
+      }
       
       const topUpAmount = Number(team.topUp || 0);
       const purse = Number(s.teamPurse || team.purse || 0) + topUpAmount;
@@ -1081,87 +1275,101 @@
 
       const slotsFilled = bought.length;
       const slotsLeft = Math.max(0, perTeam - slotsFilled);
-      const purseLeft = Math.max(0, purse - (spent + captainSpent));
+      const purseLeft = Math.max(0, purse - spent);
       
       const reserve = Math.max(0, slotsLeft - 1) * base; 
       const maxBid = slotsLeft > 0 ? Math.max(0, purseLeft - reserve) : 0;
 
-      return { bought, spent, purseLeft, slotsFilled, slotsLeft, maxBid, topUpAmount, captainsCount: captainsBought.length, captainSpent };
+      return { bought, spent, purseLeft, slotsFilled, slotsLeft, maxBid, topUpAmount, captainsCount, captainSpent };
     }
 
     function pushFeed(text) {
       state.feed.unshift({ text, time: new Date() });
-      state.feed = state.feed.slice(0, 30);
-      renderFeed();
+      if (state.feed.length > 30) state.feed.length = 30;
+      scheduleRender({ feed: true });
     }
 
     function updateNavVisibility() {
       const s = state.settings || {};
-      const isEnded = s.auctionEnded || s.status === "Ended";
-      
+      const isEnded = Boolean(s.auctionEnded || s.status === "Ended");
+      if (state.lastEndedState === isEnded && activeScreenIndex !== -1) return;
+      state.lastEndedState = isEnded;
+
       if (isEnded) {
-          $("tabLive").style.display = "none";
-          screenOrder = ["screenTeams", "screenPlayers"];
-          
-          if (activeScreenIndex === -1 || activeScreenIndex === 0) { 
-              switchScreen("screenTeams");
-          } else {
-              const currentId = document.querySelector(".screen.active")?.id;
-              if(currentId === "screenLive") switchScreen("screenTeams");
-              else switchScreen(currentId); 
-          }
+        el.tabLive.style.display = "none";
+        screenOrder = ["screenTeams", "screenPlayers"];
+        const currentId = document.querySelector(".screen.active")?.id;
+        if (!currentId || currentId === "screenLive") switchScreen("screenTeams");
+        else switchScreen(currentId);
       } else {
-          $("tabLive").style.display = "flex";
-          screenOrder = ["screenLive", "screenTeams", "screenPlayers"];
-          if (activeScreenIndex === -1) {
-              switchScreen("screenLive");
-          } else {
-              const currentId = document.querySelector(".screen.active")?.id || "screenLive";
-              switchScreen(currentId);
-          }
+        el.tabLive.style.display = "flex";
+        screenOrder = ["screenLive", "screenTeams", "screenPlayers"];
+        const currentId = document.querySelector(".screen.active")?.id || "screenLive";
+        switchScreen(currentId);
       }
     }
 
     function renderSummary() {
       const s = state.settings || {};
-      document.title = `${s.tournamentName || 'Tournament'} - Live Auction`; 
-      $("headerTournament").textContent = (s.tournamentName || "Live Auction") + (s.spplMode ? " 👑" : "");
-      $("sTeams").textContent = s.numTeams || state.teams.length || 0;
-      $("sPlayers").textContent = s.numPlayers || state.players.length || 0;
-      $("sPurse").textContent = Number(s.teamPurse || 0).toLocaleString("en-IN");
-      $("sRound").textContent = s.currentRound || 1;
-      $("sSold").textContent = state.players.filter(p => p.status === "Sold").length;
-      $("sUnsold").textContent = state.players.filter(p => p.status === "Unsold").length;
-      $("sPending").textContent = state.players.filter(p => !p.status || p.status === "Pending").length;
+      const nextTitle = `${s.tournamentName || 'Tournament'} - Live Auction`;
+      if (document.title !== nextTitle) document.title = nextTitle;
 
-      if(s.tournamentLogoUrl) {
-          $("headerTournamentLogo").src = s.tournamentLogoUrl;
-          $("headerTournamentLogo").classList.remove("hidden");
-      } else {
-          $("headerTournamentLogo").src = "";
-          $("headerTournamentLogo").classList.add("hidden");
+      let sold = 0, unsold = 0, pending = 0;
+      for (const p of state.players) {
+        if (p.status === "Sold") sold++;
+        else if (p.status === "Unsold") unsold++;
+        else pending++;
       }
 
-      const badge = $("liveBadge");
+      setText(el.headerTournament, (s.tournamentName || "Live Auction") + (s.spplMode ? " 👑" : ""));
+      setText(el.sTeams, s.numTeams || state.teams.length || 0);
+      setText(el.sPlayers, s.numPlayers || state.players.length || 0);
+      setText(el.sPurse, Number(s.teamPurse || 0).toLocaleString("en-IN"));
+      setText(el.sRound, s.currentRound || 1);
+      setText(el.sSold, sold);
+      setText(el.sUnsold, unsold);
+      setText(el.sPending, pending);
+
+      const logoUrl = s.tournamentLogoUrl || "";
+      if (state.lastHeaderLogoSrc !== logoUrl) {
+        state.lastHeaderLogoSrc = logoUrl;
+        if (logoUrl) {
+          el.headerTournamentLogo.src = logoUrl;
+          el.headerTournamentLogo.classList.remove("hidden");
+        } else {
+          el.headerTournamentLogo.removeAttribute("src");
+          el.headerTournamentLogo.classList.add("hidden");
+        }
+      }
+
       if (s.auctionEnded || s.status === "Ended") {
-        badge.textContent = "● ENDED";
-        badge.className = "live-badge is-complete";
+        setText(el.liveBadge, "● ENDED");
+        el.liveBadge.className = "live-badge is-complete";
       } else if (s.status === "Live" || s.livePlayerId) {
-        badge.textContent = "● LIVE";
-        badge.className = "live-badge";
+        setText(el.liveBadge, "● LIVE");
+        el.liveBadge.className = "live-badge";
       } else {
-        badge.textContent = "● UPCOMING";
-        badge.className = "live-badge is-upcoming";
+        setText(el.liveBadge, "● UPCOMING");
+        el.liveBadge.className = "live-badge is-upcoming";
       }
 
       updateNavVisibility();
     }
 
     function renderCurrentPlayer() {
-      const liveId = state.settings?.livePlayerId || "";
-      const player = state.players.find(p => p.id === liveId);
-      const wrap = $("currentPlayerArea");
-      const badge = $("currentBadge");
+      const s = state.settings || {};
+      const liveId = s.livePlayerId || "";
+      const player = liveId ? state.playerMap.get(liveId) : null;
+
+      const renderKey = player
+        ? `${player.id}|${player.name}|${player.role || ""}|${player.age ?? ""}|${player.city || ""}|${player.batting || ""}|${player.bowling || ""}|${player.imageUrl || ""}|${player.isCaptain ? 1 : 0}|${player.isIconPlayer ? 1 : 0}|${player.isChitPlayer ? 1 : 0}|${player.basePrice || s.basePrice || ""}|${player.auctionRound || s.currentRound || 1}|${player.reauctionCount || 0}`
+        : "EMPTY";
+
+      if (state.lastLiveRenderKey === renderKey) return;
+      state.lastLiveRenderKey = renderKey;
+
+      const wrap = el.currentPlayerArea;
+      const badge = el.currentBadge;
 
       if (!player) {
         wrap.innerHTML = `
@@ -1178,16 +1386,18 @@
       badge.textContent = reauction ? "Re-Auction" : "Live Block";
       badge.className = reauction ? "status-pill is-reauction" : "status-pill";
 
-      const isCaptain = player.isCaptain;
+      const isCaptain = Boolean(player.isCaptain);
+      const roleStr = String(player.role || "").trim();
+      const ageStr = String(player.age ?? "").trim();
       const cityStr = String(player.city || "").trim();
 
       wrap.innerHTML = `
         ${isCaptain ? `<div style="position:absolute; top: -10px; font-size:10px; font-weight:800; color:#000; background:var(--accent-blue); padding:4px 12px; border-radius:100px; text-transform:uppercase; letter-spacing:1px; box-shadow:0 4px 12px rgba(96,165,250,0.4); animation: pulseBlue 2s infinite; z-index:20;">👑 CAPTAIN AUCTION</div>` : ''}
         <div class="player-photo-wrap" style="margin-top: ${isCaptain ? '16px' : '0'};">
           <div class="player-photo-glow" style="${isCaptain ? 'background-color: var(--accent-blue);' : ''}"></div>
-          <img class="player-photo" style="${isCaptain ? 'box-shadow: 0 0 0 2px var(--accent-blue);' : ''}" src="${player.imageUrl || placeholder(player.name?.[0])}" alt="${escapeHtml(player.name)}">
+          <img class="player-photo" decoding="async" fetchpriority="high" style="${isCaptain ? 'box-shadow: 0 0 0 2px var(--accent-blue);' : ''}" src="${player.imageUrl || placeholder(player.name?.[0])}" alt="${escapeHtml(player.name)}">
         </div>
-        <div class="player-base-price" style="${isCaptain ? 'color: var(--accent-blue); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.1);' : ''}">💰 Base Price: ${formatPrice(player.isCaptain ? 100 : (player.basePrice || state.settings?.basePrice), isCaptain)}</div>
+        <div class="player-base-price" style="${isCaptain ? 'color: var(--accent-blue); border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.1);' : ''}">💰 Base Price: ${formatPrice(player.isCaptain ? 100 : (player.basePrice || s.basePrice), isCaptain)}</div>
         <h3 class="player-name-title">
           ${isCaptain ? '<span style="color: var(--accent-blue);">👑</span> ' : ''}
           ${player.isIconPlayer ? '<span style="color: var(--accent-gold);">⭐</span>' : ''}
@@ -1195,10 +1405,12 @@
           ${escapeHtml(player.name)}
         </h3>
         <div class="player-tags">
+          ${roleStr ? `<span class="tag" style="color: var(--accent-gold); border-color: rgba(251,191,36,0.3);">⚡ ${escapeHtml(roleStr)}</span>` : ''}
+          ${ageStr ? `<span class="tag">🎂 ${escapeHtml(ageStr)} yrs</span>` : ''}
           ${cityStr ? `<span class="tag">📍 ${escapeHtml(cityStr)}</span>` : ''}
           <span class="tag">🏏 Bat: ${escapeHtml(player.batting || "-")}</span>
           <span class="tag">🥎 Bowl: ${escapeHtml(player.bowling || "-")}</span>
-          <span class="tag">${isCaptain ? 'SPPL CAPTAIN' : 'Round ' + (player.auctionRound || state.settings?.currentRound || 1)}</span>
+          <span class="tag">${isCaptain ? 'SPPL CAPTAIN' : 'Round ' + (player.auctionRound || s.currentRound || 1)}</span>
         </div>
       `;
     }
@@ -1210,15 +1422,19 @@
     }
 
     function openPlayerOverview(playerId) {
-      const p = state.players.find(item => item.id === playerId);
+      const p = state.playerMap.get(playerId);
       if (!p) return;
 
       const isSold = p.status === "Sold";
+      const roleStr = String(p.role || "").trim();
+      const ageStr = String(p.age ?? "").trim();
       const cityStr = String(p.city || "").trim();
+      const optionalCount = (roleStr ? 1 : 0) + (ageStr ? 1 : 0);
+      const basePriceSpan = optionalCount === 1 ? "" : "grid-column: span 2;";
 
-      $("overviewContent").innerHTML = `
+      el.overviewContent.innerHTML = `
         <button type="button" id="overviewPhotoTrigger" class="overview-avatar-btn" aria-label="View full player photo">
-          <img src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}" style="width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); margin: 0 auto; ${p.isCaptain ? 'box-shadow: 0 0 15px rgba(96,165,250,0.5); border-color: var(--accent-blue);' : ''}">
+          <img src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}" decoding="async" style="width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); margin: 0 auto; ${p.isCaptain ? 'box-shadow: 0 0 15px rgba(96,165,250,0.5); border-color: var(--accent-blue);' : ''}">
           <span class="overview-zoom-badge">🔍</span>
         </button>
         <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
@@ -1227,11 +1443,13 @@
         <div style="margin-bottom: 16px;"><span class="${statusStyle(p.status)}">${p.status || "Pending"}</span></div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; background: var(--bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border-light); font-size: 11px; margin-bottom: 16px;">
+          ${roleStr ? `<div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Role</span><b style="color: var(--accent-gold);">${escapeHtml(roleStr)}</b></div>` : ''}
+          ${ageStr ? `<div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Age</span><b>${escapeHtml(ageStr)} yrs</b></div>` : ''}
           <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">City</span><b>${escapeHtml(cityStr || "-")}</b></div>
           <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Auction Round</span><b>${p.isCaptain ? 'SPPL CAPTAIN' : 'Round ' + (p.auctionRound || 1)}</b></div>
           <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Batting</span><b>${escapeHtml(p.batting || "-")}</b></div>
           <div><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Bowling</span><b>${escapeHtml(p.bowling || "-")}</b></div>
-          <div style="grid-column: span 2;"><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Base Price</span><b style="color:${p.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(p.isCaptain ? 100 : (p.basePrice || state.settings?.basePrice), p.isCaptain)}</b></div>
+          <div style="${basePriceSpan}"><span style="color: var(--text-faint); display:block; font-size: 9px; font-weight:700; text-transform:uppercase;">Base Price</span><b style="color:${p.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(p.isCaptain ? 100 : (p.basePrice || state.settings?.basePrice), p.isCaptain)}</b></div>
         </div>
 
         ${isSold ? `
@@ -1248,22 +1466,32 @@
         openPhotoZoom(p);
       });
 
-      $("playerOverviewModal").classList.add("show");
+      el.playerOverviewModal.classList.add("show");
     }
 
     function renderTeams() {
-      const wrap = $("teamsDashboard");
-      $("teamCountBadge").textContent = state.teams.length;
+      const wrap = el.teamsDashboard;
+      setText(el.teamCountBadge, state.teams.length);
 
       if (!state.teams.length) {
         wrap.innerHTML = `<p class="empty-state">No teams found.</p>`;
         return;
       }
 
+      // Single-pass grouping of sold players per team
+      const soldByTeamId = new Map();
+      for (const p of state.players) {
+        if (p.status === "Sold" && p.soldToTeamId) {
+          let list = soldByTeamId.get(p.soldToTeamId);
+          if (!list) { list = []; soldByTeamId.set(p.soldToTeamId, list); }
+          list.push(p);
+        }
+      }
+
       const sortedTeams = [...state.teams].sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }));
 
       wrap.innerHTML = sortedTeams.map(team => {
-        const stats = getTeamStats(team);
+        const stats = getTeamStats(team, soldByTeamId.get(team.id));
         
         const sortedBought = [...stats.bought].sort((a, b) => {
           if (a.isCaptain && !b.isCaptain) return -1;
@@ -1275,21 +1503,26 @@
           if (aIsSpecial && !bIsSpecial) return -1;
           if (!aIsSpecial && bIsSpecial) return 1;
 
-          const priceA = Number(a.soldPrice) || 0;
-          const priceB = Number(b.soldPrice) || 0;
-          return priceB - priceA; 
+          return (Number(b.soldPrice) || 0) - (Number(a.soldPrice) || 0);
         });
 
         const rosterHtml = sortedBought.length
           ? sortedBought.map(p => {
+              const roleStr = String(p.role || "").trim();
+              const ageStr = String(p.age ?? "").trim();
               const cityStr = String(p.city || "").trim();
+              const metaParts = [
+                roleStr ? escapeHtml(roleStr) : "",
+                ageStr ? `${escapeHtml(ageStr)} yrs` : "",
+                cityStr ? `📍 ${escapeHtml(cityStr)}` : ""
+              ].filter(Boolean).join(" · ");
               return `
                 <div class="roster-item" data-player-id="${p.id}">
                   <div class="roster-player">
-                    <img class="roster-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}">
+                    <img class="roster-avatar" loading="lazy" decoding="async" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}">
                     <div style="min-width: 0;">
                       <span class="roster-name" style="display: block;">${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${escapeHtml(p.name)}</span>
-                      ${cityStr ? `<span style="display: block; font-size: 10px; color: var(--text-faint); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">📍 ${escapeHtml(cityStr)}</span>` : ''}
+                      ${metaParts ? `<span style="display: block; font-size: 10px; color: var(--text-faint); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${metaParts}</span>` : ''}
                     </div>
                   </div>
                   <b class="roster-price" style="${p.isCaptain ? 'color: var(--accent-blue);' : 'color: var(--accent-gold);'}">${formatPrice(p.soldPrice, p.isCaptain)}</b>
@@ -1302,7 +1535,7 @@
           <article class="team-card">
             <div class="team-card-header">
               <div class="team-info">
-                <img class="team-avatar" src="${team.logoUrl || placeholder(team.name?.[0])}" alt="${escapeHtml(team.name)}">
+                <img class="team-avatar" loading="lazy" decoding="async" src="${team.logoUrl || placeholder(team.name?.[0])}" alt="${escapeHtml(team.name)}">
                 <div style="min-width: 0;">
                   <h3 class="team-name">${escapeHtml(team.name || "Team")}</h3>
                   ${team.ownerName ? `<p class="team-owner">👤 ${escapeHtml(team.ownerName)}</p>` : ''}
@@ -1320,24 +1553,24 @@
           </article>
         `;
       }).join("");
-
-      wrap.querySelectorAll('.roster-item[data-player-id]').forEach(elem => {
-        elem.addEventListener('click', () => openPlayerOverview(elem.dataset.playerId));
-      });
     }
 
     function buildPlayerCardHtml(p, rank) {
       const isSold = p.status === "Sold";
+      const roleStr = String(p.role || "").trim();
+      const ageStr = String(p.age ?? "").trim();
       const cityStr = String(p.city || "").trim();
 
       return `
         <article class="player-card" data-player-id="${p.id}">
           <div class="player-card-left">
             <span class="player-rank">${rank}</span>
-            <img class="player-avatar" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}">
+            <img class="player-avatar" loading="lazy" decoding="async" src="${p.imageUrl || placeholder(p.name?.[0])}" alt="${escapeHtml(p.name)}">
             <div style="min-width: 0;">
               <h3 class="player-name-row">${p.isCaptain ? '👑 ' : ''}${p.isIconPlayer ? '⭐ ' : ''}${p.isChitPlayer ? '🎟️ ' : ''}${escapeHtml(p.name)}</h3>
               <div class="player-skills">
+                ${roleStr ? `<span style="color: var(--accent-gold);">⚡ ${escapeHtml(roleStr)}</span>` : ''}
+                ${ageStr ? `<span>🎂 ${escapeHtml(ageStr)}</span>` : ''}
                 ${cityStr ? `<span>📍 ${escapeHtml(cityStr)}</span>` : ''}
                 <span>🏏 ${escapeHtml(p.batting || "-")}</span>
                 <span>🥎 ${escapeHtml(p.bowling || "-")}</span>
@@ -1353,49 +1586,49 @@
     }
 
     function renderPlayers() {
-      const wrap = $("playersList");
+      const wrap = el.playersList;
       const q = state.searchQuery.trim().toLowerCase();
-      let filtered = state.players.filter(p => {
+      const filtered = [];
+      for (const p of state.players) {
         let mStatus = false;
         if (state.activeFilter === "All") mStatus = true;
         else if (state.activeFilter === "Sold") mStatus = p.status === "Sold";
         else if (state.activeFilter === "Unsold") mStatus = p.status === "Unsold";
         else if (state.activeFilter === "Pending") mStatus = (!p.status || p.status === "Pending");
+        if (!mStatus) continue;
 
-        const mSearch = !q
-          || (p.name || "").toLowerCase().includes(q)
-          || (p.city || "").toLowerCase().includes(q);
-        return mStatus && mSearch;
-      });
+        if (q) {
+          const match = (p.name || "").toLowerCase().includes(q)
+            || (p.city || "").toLowerCase().includes(q)
+            || (p.role || "").toLowerCase().includes(q);
+          if (!match) continue;
+        }
+        filtered.push(p);
+      }
 
-      $("playerTableBadge").textContent = filtered.length;
+      setText(el.playerTableBadge, filtered.length);
 
       if (!filtered.length) {
         wrap.innerHTML = `<p class="empty-state">No matching players found.</p>`;
         return;
       }
 
-      const sorted = [...filtered].sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }));
+      filtered.sort((a, b) => (a.name || "").localeCompare(b.name || "", "en", { sensitivity: "base" }));
       
       wrap.innerHTML = `
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          ${sorted.map((p, idx) => buildPlayerCardHtml(p, idx + 1)).join("")}
+          ${filtered.map((p, idx) => buildPlayerCardHtml(p, idx + 1)).join("")}
         </div>
       `;
-
-      wrap.querySelectorAll('.player-card').forEach(elem => {
-        elem.addEventListener('click', () => openPlayerOverview(elem.dataset.playerId));
-      });
     }
 
     function renderFeed() {
-      const list = $("feedList");
-      $("feedCountBadge").textContent = state.feed.length;
+      setText(el.feedCountBadge, state.feed.length);
       if (!state.feed.length) {
-        list.innerHTML = `<li class="empty-state">Waiting for updates...</li>`;
+        el.feedList.innerHTML = `<li class="empty-state">Waiting for updates...</li>`;
         return;
       }
-      list.innerHTML = state.feed.map(item => `
+      el.feedList.innerHTML = state.feed.map(item => `
         <li class="feed-item">
           <span class="feed-item-text">${escapeHtml(item.text)}</span>
           <small class="feed-item-time">${item.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</small>
@@ -1407,41 +1640,40 @@
       if (soldHideTimer) clearTimeout(soldHideTimer);
       if (soldConfettiTimer) clearTimeout(soldConfettiTimer);
       if (unsoldHideTimer) clearTimeout(unsoldHideTimer);
-      $("unsoldOverlay").classList.remove("show");
+      el.unsoldOverlay.classList.remove("show");
 
-      const overlay = $("resultOverlay");
+      const overlay = el.resultOverlay;
       overlay.querySelector(".confetti-wrap")?.remove();
       
       const confetti = document.createElement("div");
       confetti.className = "confetti-wrap";
       
       let confettiHtml = "";
-      for (let i = 0; i < 60; i++) {
-        let color = player.isCaptain 
+      for (let i = 0; i < 36; i++) {
+        const color = player.isCaptain 
             ? (i % 3 === 0 ? '#60a5fa' : i % 2 === 0 ? '#fbbf24' : '#ffffff') 
             : `hsl(${(i * 38) % 360}, 90%, 65%)`;
         confettiHtml += `<span style="background: ${color}; --i:${i}; --delay:${(i % 10) * 0.045}s; --x:${(i % 2 ? 1 : -1) * (30 + (i % 7) * 20)}px; --rot:${(i * 47) % 360}deg;"></span>`;
       }
       confetti.innerHTML = confettiHtml;
 
-      $("soldBadge").textContent = player.isCaptain ? "👑 CAPTAIN SOLD!" : "SOLD!";
-      $("soldBadge").className = `overlay-badge ${player.isCaptain ? 'text-[#60a5fa] bg-[#60a5fa]/20 border-[#60a5fa]/30' : ''}`;
+      el.soldBadge.textContent = player.isCaptain ? "👑 CAPTAIN SOLD!" : "SOLD!";
+      el.soldBadge.className = `overlay-badge ${player.isCaptain ? 'text-[#60a5fa] bg-[#60a5fa]/20 border-[#60a5fa]/30' : ''}`;
       
-      $("oName").textContent = (player.isCaptain ? '👑 ' : '') + (player.isIconPlayer ? '⭐ ' : '') + (player.isChitPlayer ? '🎟️ ' : '') + (player.name || "Player");
+      el.oName.textContent = (player.isCaptain ? '👑 ' : '') + (player.isIconPlayer ? '⭐ ' : '') + (player.isChitPlayer ? '🎟️ ' : '') + (player.name || "Player");
 
-      const soldCity = String(player.city || "").trim();
-      const oCityEl = $("oCity");
-      if (soldCity) {
-        oCityEl.textContent = `📍 ${soldCity}`;
-        oCityEl.style.display = "block";
+      const soldMeta = buildOverlayMeta(player);
+      if (soldMeta) {
+        el.oCity.textContent = soldMeta;
+        el.oCity.style.display = "block";
       } else {
-        oCityEl.textContent = "";
-        oCityEl.style.display = "none";
+        el.oCity.textContent = "";
+        el.oCity.style.display = "none";
       }
       
-      $("soldDivider").className = `overlay-divider ${player.isCaptain ? 'bg-[#60a5fa]' : 'bg-[var(--accent-green)]'}`;
+      el.soldDivider.className = `overlay-divider ${player.isCaptain ? 'bg-[#60a5fa]' : 'bg-[var(--accent-green)]'}`;
       
-      $("oMeta").innerHTML = `<span style="font-weight:700;color:var(--text-muted);">${escapeHtml(player.soldToTeamName || "Team")}</span> <br> <b style="font-size:24px;margin-top:8px;display:inline-block;font-weight:800;color:${player.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(player.soldPrice, player.isCaptain)}</b>`;
+      el.oMeta.innerHTML = `<span style="font-weight:700;color:var(--text-muted);">${escapeHtml(player.soldToTeamName || "Team")}</span> <br> <b style="font-size:24px;margin-top:8px;display:inline-block;font-weight:800;color:${player.isCaptain ? 'var(--accent-blue)' : 'var(--accent-gold)'};">${formatPrice(player.soldPrice, player.isCaptain)}</b>`;
 
       overlay.querySelector('.overlay-card').prepend(confetti);
       overlay.classList.add("show");
@@ -1452,71 +1684,72 @@
     function showUnsoldOverlay(player) {
       if (soldHideTimer) clearTimeout(soldHideTimer);
       if (unsoldHideTimer) clearTimeout(unsoldHideTimer);
-      $("resultOverlay").classList.remove("show");
+      el.resultOverlay.classList.remove("show");
 
-      const overlay = $("unsoldOverlay");
-      $("uName").textContent = (player.isCaptain ? '👑 ' : '') + (player.name || "Player");
+      el.uName.textContent = (player.isCaptain ? '👑 ' : '') + (player.name || "Player");
 
-      const unsoldCity = String(player.city || "").trim();
-      const uCityEl = $("uCity");
-      if (unsoldCity) {
-        uCityEl.textContent = `📍 ${unsoldCity}`;
-        uCityEl.style.display = "block";
+      const unsoldMeta = buildOverlayMeta(player);
+      if (unsoldMeta) {
+        el.uCity.textContent = unsoldMeta;
+        el.uCity.style.display = "block";
       } else {
-        uCityEl.textContent = "";
-        uCityEl.style.display = "none";
+        el.uCity.textContent = "";
+        el.uCity.style.display = "none";
       }
 
-      overlay.classList.add("show");
-      unsoldHideTimer = setTimeout(() => { overlay.classList.remove("show"); unsoldHideTimer = null; }, 3000);
+      el.unsoldOverlay.classList.add("show");
+      unsoldHideTimer = setTimeout(() => { el.unsoldOverlay.classList.remove("show"); unsoldHideTimer = null; }, 3000);
     }
 
-    function detectPlayerChanges(players) {
+    function detectPlayerChanges(changes) {
       const isAuctionEnded = state.settings?.auctionEnded || state.settings?.status === "Ended";
+      const newlyUnsold = [];
 
-      players.forEach(player => {
-        const oldStatus = state.prevStatusMap.get(player.id);
-        const newStatus = player.status || "Pending";
-
-        if (oldStatus) {
-            if (newStatus === "Sold" && oldStatus !== "Sold") {
-              pushFeed(`✅ ${player.isCaptain ? '👑 ' : ''}${player.isChitPlayer ? '🎟️ ' : ''}${player.name} sold to ${player.soldToTeamName} for ${formatPrice(player.soldPrice, player.isCaptain)}`);
-              
-              if (!isAuctionEnded && !player.isIconPlayer && !state.isFirstPlayersLoad) {
-                  showSoldOverlay(player);
-              }
-            }
-            if (newStatus === "Unsold" && oldStatus !== "Unsold") {
-              pushFeed(`❌ ${player.isCaptain ? '👑 ' : ''}${player.name} marked unsold`);
-              
-              if (!isAuctionEnded && !player.isIconPlayer && !state.isFirstPlayersLoad) {
-                  showUnsoldOverlay(player);
-              }
-            }
+      for (const change of changes) {
+        const id = change.doc.id;
+        if (change.type === "removed") {
+          state.prevStatusMap.delete(id);
+          continue;
         }
-      });
-      state.prevStatusMap = new Map(players.map(p => [p.id, p.status || "Pending"]));
-    }
 
-    function renderAll() {
-      renderSummary(); 
-      renderCurrentPlayer();
-      renderTeams();
-      renderPlayers();
-      renderFeed();
+        const player = { id, ...change.doc.data() };
+        const newStatus = player.status || "Pending";
+        const oldStatus = state.prevStatusMap.get(id);
+
+        if (change.type === "modified" && oldStatus) {
+          if (newStatus === "Sold" && oldStatus !== "Sold") {
+            pushFeed(`✅ ${player.isCaptain ? '👑 ' : ''}${player.isChitPlayer ? '🎟️ ' : ''}${player.name} sold to ${player.soldToTeamName} for ${formatPrice(player.soldPrice, player.isCaptain)}`);
+            if (!isAuctionEnded && !player.isIconPlayer) {
+              showSoldOverlay(player);
+            }
+          } else if (newStatus === "Unsold" && oldStatus !== "Unsold") {
+            newlyUnsold.push(player);
+          }
+        }
+
+        state.prevStatusMap.set(id, newStatus);
+      }
+
+      if (newlyUnsold.length === 1) {
+        const player = newlyUnsold[0];
+        pushFeed(`❌ ${player.isCaptain ? '👑 ' : ''}${player.name} marked unsold`);
+        if (!isAuctionEnded && !player.isIconPlayer) {
+          showUnsoldOverlay(player);
+        }
+      }
     }
 
     function switchScreen(id) {
-      if(!screenOrder.includes(id)) return;
+      if (!screenOrder.includes(id)) return;
       const nextIndex = screenOrder.indexOf(id);
 
       document.querySelectorAll(".screen").forEach(screen => {
-        if(!screenOrder.includes(screen.id)) {
-            screen.classList.remove("active", "left", "right");
-            screen.style.display = "none";
-            return;
+        if (!screenOrder.includes(screen.id)) {
+          screen.classList.remove("active", "left", "right");
+          screen.style.display = "none";
+          return;
         } else {
-            screen.style.display = "flex";
+          screen.style.display = "flex";
         }
         
         const index = screenOrder.indexOf(screen.id);
@@ -1530,12 +1763,33 @@
       nextScreen.classList.add("active");
 
       document.querySelectorAll(".tab").forEach(tab => {
-        const isCurrent = tab.dataset.screen === id;
-        tab.classList.toggle("active", isCurrent);
+        tab.classList.toggle("active", tab.dataset.screen === id);
       });
 
       activeScreenIndex = nextIndex;
+
+      // Render newly activated tab immediately if it has pending updates
+      if (id === "screenLive") {
+        if (dirty.live) { dirty.live = false; renderCurrentPlayer(); }
+        if (dirty.feed) { dirty.feed = false; renderFeed(); }
+      } else if (id === "screenTeams" && dirty.teams) {
+        dirty.teams = false;
+        renderTeams();
+      } else if (id === "screenPlayers" && dirty.players) {
+        dirty.players = false;
+        renderPlayers();
+      }
     }
+
+    // Delegated clicks for Teams Roster & Players Directory
+    el.teamsDashboard.addEventListener("click", (e) => {
+      const item = e.target.closest(".roster-item[data-player-id]");
+      if (item) openPlayerOverview(item.dataset.playerId);
+    });
+    el.playersList.addEventListener("click", (e) => {
+      const card = e.target.closest(".player-card[data-player-id]");
+      if (card) openPlayerOverview(card.dataset.playerId);
+    });
 
     // Connect Bottom Nav Triggers
     document.querySelectorAll(".tab").forEach(tab => {
@@ -1544,15 +1798,14 @@
 
     // Mobile swipe mapping
     let touchStartX = 0, touchEndX = 0, touchStartY = 0, touchEndY = 0;
-    const swipeThreshold = 50; 
-    const screenWrap = $("screenWrap");
+    const swipeThreshold = 50;
 
-    screenWrap.addEventListener('touchstart', e => {
+    el.screenWrap.addEventListener('touchstart', e => {
       touchStartX = e.changedTouches[0].screenX;
       touchStartY = e.changedTouches[0].screenY;
     }, { passive: true });
 
-    screenWrap.addEventListener('touchend', e => {
+    el.screenWrap.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
       touchEndY = e.changedTouches[0].screenY;
       const diffX = touchStartX - touchEndX;
@@ -1567,7 +1820,7 @@
       }
     }, { passive: true });
 
-    // Directory filter & search maps
+    // Directory filter & debounced search maps
     document.querySelectorAll(".filter-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -1576,21 +1829,24 @@
         renderPlayers();
       });
     });
-    $("playerSearch").addEventListener("input", (e) => {
+    el.playerSearch.addEventListener("input", (e) => {
       state.searchQuery = e.target.value;
-      renderPlayers();
+      if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        searchDebounceTimer = null;
+        renderPlayers();
+      }, 80);
     });
 
     // Modals Handling
-    $("infoBtn").addEventListener("click", () => $("infoModal").classList.add("show"));
-    $("closeInfoBtn").addEventListener("click", () => $("infoModal").classList.remove("show"));
-    $("infoModal").addEventListener("click", (e) => { if (e.target === $("infoModal")) $("infoModal").classList.remove("show"); });
-    $("closeOverviewBtn").addEventListener("click", () => $("playerOverviewModal").classList.remove("show"));
-    $("playerOverviewModal").addEventListener("click", (e) => { if (e.target === $("playerOverviewModal")) $("playerOverviewModal").classList.remove("show"); });
+    $("infoBtn").addEventListener("click", () => el.infoModal.classList.add("show"));
+    $("closeInfoBtn").addEventListener("click", () => el.infoModal.classList.remove("show"));
+    el.infoModal.addEventListener("click", (e) => { if (e.target === el.infoModal) el.infoModal.classList.remove("show"); });
+    $("closeOverviewBtn").addEventListener("click", () => el.playerOverviewModal.classList.remove("show"));
+    el.playerOverviewModal.addEventListener("click", (e) => { if (e.target === el.playerOverviewModal) el.playerOverviewModal.classList.remove("show"); });
 
     // Robust clipboard fallback helper
     async function copyToClipboard(text) {
-      // 1. Try modern clipboard API if available and secure
       if (navigator.clipboard && window.isSecureContext) {
         try {
           await navigator.clipboard.writeText(text);
@@ -1601,11 +1857,9 @@
         }
       }
       
-      // 2. Legacy fallback for older browsers or non-secure webviews
       try {
         const textArea = document.createElement("textarea");
         textArea.value = text;
-        // Prevent scrolling to bottom
         textArea.style.top = "0";
         textArea.style.left = "0";
         textArea.style.position = "fixed";
@@ -1616,11 +1870,8 @@
         const successful = document.execCommand('copy');
         document.body.removeChild(textArea);
         
-        if (successful) {
-          showToast("🔗 Link copied to clipboard!");
-        } else {
-          showToast("Failed to copy link");
-        }
+        if (successful) showToast("🔗 Link copied to clipboard!");
+        else showToast("Failed to copy link");
       } catch (err) {
         console.error("Legacy copy failed:", err);
         showToast("Failed to copy link");
@@ -1636,25 +1887,19 @@
       
       const shareUrl = `${window.location.origin}${window.location.pathname}?auction=${currentAuctionId}`;
       const tName = state.settings?.tournamentName || 'tournament';
-      const shareTitle = `${tName} - Auctify`;
       const shareData = {
-        title: shareTitle,
+        title: `${tName} - Auctify`,
         text: `Watch the live auction for ${tName}!`,
         url: shareUrl
       };
       
-      // Check if native sharing is fully supported for this data
       if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
         try {
           await navigator.share(shareData);
         } catch (err) {
-          // Ignore if the user intentionally dismissed the share sheet
-          if (err.name !== "AbortError") {
-            await copyToClipboard(shareUrl);
-          }
+          if (err.name !== "AbortError") await copyToClipboard(shareUrl);
         }
       } else {
-        // Native share not supported, fallback to clipboard
         await copyToClipboard(shareUrl);
       }
     });
@@ -1664,64 +1909,88 @@
     // ============================================
     function initRealtimeListeners() {
       unsubSettings = onSnapshot(SETTINGS_REF, snap => {
-        state.settings = snap.exists() ? snap.data() : null;
-        const liveId = state.settings?.livePlayerId || "";
+        const prevSettings = state.settings;
+        const nextSettings = snap.exists() ? snap.data() : null;
+        state.settings = nextSettings;
+
+        const liveId = nextSettings?.livePlayerId || "";
         if (liveId && liveId !== state.prevLiveId) {
-          const player = state.players.find(p => p.id === liveId);
+          const player = state.playerMap.get(liveId);
           if (player) pushFeed(`🎯 On the Block: ${player.isCaptain ? '👑 ' : ''}${player.name}`);
         }
         state.prevLiveId = liveId;
-        renderAll();
-      });
 
-      let isFirstTeamsLoad = true;
+        const rulesChanged = !prevSettings
+          || prevSettings.teamPurse !== nextSettings?.teamPurse
+          || prevSettings.playersPerTeam !== nextSettings?.playersPerTeam
+          || prevSettings.basePrice !== nextSettings?.basePrice;
+
+        scheduleRender({ summary: true, live: true, teams: rulesChanged });
+      }, err => console.error("Settings listener error:", err));
+
       unsubTeams = onSnapshot(teamsCol, snap => {
         const newTeams = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        if (!isFirstTeamsLoad) {
-          newTeams.forEach(team => {
-            const oldTopUp = state.prevTeamTopUpMap.get(team.id) || 0;
+        if (state.isFirstTeamsLoad) {
+          state.prevTeamTopUpMap = new Map(newTeams.map(t => [t.id, Number(t.topUp) || 0]));
+          state.isFirstTeamsLoad = false;
+        } else {
+          for (const change of snap.docChanges()) {
+            const id = change.doc.id;
+            if (change.type === "removed") {
+              state.prevTeamTopUpMap.delete(id);
+              continue;
+            }
+            const team = { id, ...change.doc.data() };
             const newTopUp = Number(team.topUp) || 0;
-            if (newTopUp > oldTopUp) {
+            const oldTopUp = state.prevTeamTopUpMap.get(id) || 0;
+            if (change.type === "modified" && newTopUp > oldTopUp) {
               const diff = newTopUp - oldTopUp;
               showToast(`💰 <b>${escapeHtml(team.name)}</b> received a top-up of <span style="color:var(--accent-gold)">${money(diff)}</span>!`);
               pushFeed(`💰 ${team.name} purse topped up by ${money(diff)}`);
             }
-          });
+            state.prevTeamTopUpMap.set(id, newTopUp);
+          }
         }
-        state.prevTeamTopUpMap = new Map(newTeams.map(t => [t.id, Number(t.topUp) || 0]));
-        isFirstTeamsLoad = false;
         state.teams = newTeams;
-        renderAll();
-      });
+        scheduleRender({ summary: true, teams: true });
+      }, err => console.error("Teams listener error:", err));
 
       unsubPlayers = onSnapshot(playersCol, snap => {
-        const players = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        
-        if (!state.isFirstPlayersLoad) {
-            detectPlayerChanges(players);
+        const players = new Array(snap.docs.length);
+        const nextMap = new Map();
+        for (let i = 0; i < snap.docs.length; i++) {
+          const d = snap.docs[i];
+          const p = { id: d.id, ...d.data() };
+          players[i] = p;
+          nextMap.set(d.id, p);
+        }
+
+        if (state.isFirstPlayersLoad) {
+          state.prevStatusMap = new Map(players.map(p => [p.id, p.status || "Pending"]));
+          state.isFirstPlayersLoad = false;
         } else {
-            state.prevStatusMap = new Map(players.map(p => [p.id, p.status || "Pending"]));
-            state.isFirstPlayersLoad = false;
+          detectPlayerChanges(snap.docChanges());
         }
 
         state.players = players;
-        renderAll();
-      });
+        state.playerMap = nextMap;
+        scheduleRender({ summary: true, live: true, teams: true, players: true });
+        preloadUpcomingPhotos();
+      }, err => console.error("Players listener error:", err));
     }
 
     // Splash Screen Transition Handlers
     window.enterLobby = () => {
-      const splash = $("splashScreen");
-      if (splash) {
-        splash.style.opacity = '0';
+      if (el.splashScreen) {
+        el.splashScreen.style.opacity = '0';
         setTimeout(() => {
-          splash.remove();
+          el.splashScreen.remove();
           const urlParams = new URLSearchParams(window.location.search);
           const sharedAuctionId = urlParams.get('auction');
           if (sharedAuctionId) {
             window.joinAuction(sharedAuctionId);
           } else {
-            $("lobbyView").style.display = 'flex';
+            el.lobbyView.style.display = 'flex';
             window.loadLobby();
           }
         }, 700);
